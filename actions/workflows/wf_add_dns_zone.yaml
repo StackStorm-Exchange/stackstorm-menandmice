@@ -39,7 +39,7 @@ menandmice.wf_add_dns_zone:
         session: "{{ task('login').result.result.session }}"
     
     get_master_server:
-      workflow: menandmice.get_dns_servers
+      action: menandmice.get_dns_servers
       input:
         session: "{{ _.session }}"
         server: "{{ _.server }}"
