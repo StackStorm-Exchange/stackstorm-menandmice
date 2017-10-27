@@ -36,7 +36,7 @@ parameters:
     required: false
   session:
     type: string
-    required: False
+    required: false
     description: "Login session cookie. If empty then username/password will be used to login prior to running this operation"
   dhcp_scope:
     type: object
