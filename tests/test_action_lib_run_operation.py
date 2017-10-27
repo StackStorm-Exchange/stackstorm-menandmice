@@ -2,7 +2,7 @@ from men_and_mice_base_action_test_case import MenAndMiceBaseActionTestCase
 
 from lib.run_operation import RunOperation
 from lib.run_operation import CONFIG_CONNECTION_KEYS
-from st2actions.runners.pythonrunner import Action
+from st2common.runners.base_action import Action
 
 import copy
 import mock

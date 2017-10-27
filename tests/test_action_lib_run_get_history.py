@@ -1,7 +1,7 @@
 from men_and_mice_base_action_test_case import MenAndMiceBaseActionTestCase
 
 from lib.run_get_history import RunGetHistory
-from st2actions.runners.pythonrunner import Action
+from st2common.runners.base_action import Action
 
 from mock import Mock, patch
 
