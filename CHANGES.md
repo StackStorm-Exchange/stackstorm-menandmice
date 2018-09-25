@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.1.2
+
+* Added support for self-signed SSL certificates.
+
 ## v0.1.1
 
 * Updated the required parameter to use the proper capitalization of `false` for use in JSON schema
