@@ -1,0 +1,61 @@
+version: '2.0'
+
+menandmice.test_hostname:
+  description: >
+    Test hostname to see if it is already in use in Men&Mice
+  type: direct
+  input:
+    - connection
+    - server
+    - username
+    - password
+    - port
+    - transport
+    - session
+    - dns_domain
+    - hostname
+
+  tasks:
+    main:
+      action: std.noop
+      on-success:
+        - login: "{{ _.session == '' }}"
+        - get_dns_zone: "{{ _.session != '' }}"
+
+    login:
+      action: menandmice.login
+      input:
+        connection: "{{ _.connection }}"
+        server: "{{ _.server }}"
+        username: "{{ _.username }}"
+        password: "{{ _.password }}"
+        port: "{{ _.port }}"
+        transport: "{{ _.transport }}"
+      publish:
+        session: "{{ task('login').result.result.session }}"
+      on-success:
+        - get_dns_zone
+
+    get_dns_zone:
+      action: menandmice.get_dns_zones
+      input:
+        session: "{{ _.session }}"
+        server: "{{ _.server }}"
+        transport: "{{ _.transport }}"
+        filter: "type:master name:^{{ _.dns_domain }}.$"
+      publish:
+        dns_zone_ref: "{{ task('get_dns_zone').result.result.dnsZones.dnsZone[0].ref }}"
+      on-success:
+        - check_dns_name
+
+    check_dns_name:
+      action: menandmice.get_dns_records
+      input:
+        session: "{{ _.session }}"
+        server: "{{ _.server }}"
+        transport: "{{ _.transport }}"
+        dns_zone_ref: "{{ _.dns_zone_ref }}"
+        filter: "name:{{ _.hostname }}"
+      on-complete:
+        - fail: "{{ task('check_dns_name').result.result.totalResults > 0 }}"
+        - succeed: "{{ task('check_dns_name').result.result.totalResults == 0 }}"

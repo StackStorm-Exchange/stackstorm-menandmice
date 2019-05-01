@@ -1,0 +1,47 @@
+---
+description: "Create an fqdn from the Men&Mice name and Zone info"
+enabled: true
+entry_point: workflows/resolve_fqdn.yaml
+name: resolve_fqdn
+pack: menandmice
+runner_type: "mistral-v2"
+parameters:
+  connection:
+    type: string
+    description: "Name of <connection> from this pack's configuration that specifies how to connect to a Men&Mice server."
+    required: false
+  server:
+    type: string
+    description: "Optional override of the Men&Mice server in <connection> (required if <connection> is not specified)."
+    required: false
+  username:
+    type: string
+    description: "Optional override of the Men&Mice username in <connection> (example: username@domain.tld) (required if <connection> is not specified)."
+    required: false
+  password:
+    type: string
+    description: "Optional override of the Men&Mice password in <connection>. (required if <connection> is not specified)"
+    required: false
+    secret: true
+  port:
+    type: integer
+    description: "Optional override of the Men&Mice port in <connection>."
+    required: false
+  transport:
+    type: string
+    description: "Optional override of the Men&Mice transport in <connection>."
+    required: false
+  session:
+    type: string
+    required: false
+    description: "Login session cookie. If empty then username/password will be used to login prior to running this operation"
+    default: ''
+  dns_zone_ref:
+    type: string
+    description: "Men&Mice Zone Ref"
+    required: true
+  name:
+    type: string
+    description: "Name of the DNS record"
+    required: true
+
