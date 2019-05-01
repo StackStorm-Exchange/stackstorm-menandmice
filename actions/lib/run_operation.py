@@ -1,5 +1,6 @@
 from st2common.runners.base_action import Action
 
+from requests import Session
 import zeep
 import zeep.helpers
 
@@ -8,7 +9,7 @@ CONFIG_CONNECTION_KEYS = [('server', True, ""),
                           ('username', True, ""),
                           ('password', True, ""),
                           ('port', False, ""),
-                          ('transport', False, "http"),
+                          ('transport', False, "https"),
                           ('wsdl_endpoint', False, "_mmwebext/mmwebext.dll?wsdl")]
 
 
@@ -190,7 +191,16 @@ class RunOperation(Action):
         session = self.get_del_arg('session', kwargs_dict)
         connection = self.resolve_connection(kwargs_dict)
         wsdl_url = self.build_wsdl_url(connection)
-        client = zeep.Client(wsdl=wsdl_url)
+
+        client = None
+        if connection['transport'] == "https":
+            transport_session = Session()
+            transport_session.verify = False
+            transport = zeep.transports.Transport(session=transport_session)
+            client = zeep.Client(wsdl=wsdl_url, transport=transport)
+        else:
+            client = zeep.Client(wsdl=wsdl_url)
+
         context = {'kwargs_dict': kwargs_dict,
                    'operation': operation,
                    'session': session,

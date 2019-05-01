@@ -78,6 +78,7 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         kwargs_dict = {'connection': connection_name}
         connection_result = action.resolve_connection(kwargs_dict)
         self.assertEqual(connection_result, connection_expected)
+        self.assertEqual(connection_result['transport'], 'https')
 
     def test_resolve_connection_from_kwargs(self):
         action = self.get_action_instance(self.config_blank)
@@ -106,6 +107,7 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
 
         connection_result = action.resolve_connection(kwargs_dict)
         self.assertEqual(connection_result, connection_expected)
+        self.assertEqual(connection_result['transport'], 'https')
         self.assertEqual(kwargs_dict, {})
 
     def test_resolve_connection_from_kwargs_extras(self):
@@ -208,7 +210,8 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
                        'session': 'abc123',
                        'server': 'menandmice.domain.tld',
                        'username': 'user',
-                       'password': 'pass'}
+                       'password': 'pass',
+                       'transport': 'http'}
         kwargs_dict_extras = {'arg1': 'value1',
                               'arg2': 'value2'}
         kwargs_dict.update(kwargs_dict_extras)
@@ -233,7 +236,8 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         self.assertEquals(result_context, expected_context)
 
     @mock.patch('lib.run_operation.zeep.Client')
-    def test__pre_exec_config(self, mock_client):
+    @mock.patch('lib.run_operation.zeep.transports.Transport')
+    def test__pre_exec_config(self, mock_transport, mock_client):
         action = self.get_action_instance(self.config_good)
         connection_name = 'full'
         kwargs_dict = {'operation': 'GetDNSViews',
@@ -258,7 +262,7 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         kwargs_dict_copy = copy.deepcopy(kwargs_dict)
 
         result_context, result_client = action._pre_exec(**kwargs_dict_copy)
-        mock_client.assert_called_with(wsdl=wsdl_url)
+        mock_client.assert_called_with(transport=mock_transport.return_value, wsdl=wsdl_url)
         self.assertEquals(result_client, mock_client.return_value)
         self.assertEquals(result_context, expected_context)
 
