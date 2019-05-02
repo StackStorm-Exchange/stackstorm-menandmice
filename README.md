@@ -293,7 +293,7 @@ result:
 
 ## <a name="UsageAdditionalActions"></a> Usage - Additional Actions
 
-In addition to the actions above there are a few additional actions that we will discuss here.
+In addition to the auto-generated actions described above, there are a handful of higher-level workflow actions that implement common functionality.
 
 `remove_dns_record`: Action will find the DNS record and get any related records(CNAME, AAAA, etc) tied to that record and the pointer record. Then remove all the records so that there are no orphaned records left behind. Once the records are removed we then flush the cache for just the records that were removed.
 ``` shell
@@ -309,6 +309,23 @@ parameters:
   server: menandmice.domain.tld
   username: administrator
 status: succeeded
+```
+
+`resolve_fqdn`: Action accepts a name and a DNS Zone reference. Action will find the zone and append that to the name givin returning a FQDN.
+``` shell
+$ st2 run menandmice.resolve_fqdn server=menandmice.domain.tld username=administrator password=xxx name="test-name" dns_zone_ref='{#4-#4}'
+....
+id: 5ccaed9149b3d27e56a56d07
+action.ref: menandmice.resolve_fqdn
+parameters:
+  dns_zone_ref: '{#4-#4}'
+  name: test-name
+  password: '***'
+  server: menandmice.domain.tld
+  username: administrator
+status: succeeded
+start_timestamp: Thu, 02 May 2019 13:16:01 UTC
+end_timestamp: Thu, 02 May 2019 13:16:07 UTC
 ```
 
 `test_credentials`: Action will attempt to log into the Men & Mice Server with the credential provided to test if logins are successfull or failed.

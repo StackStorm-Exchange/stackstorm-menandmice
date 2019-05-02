@@ -3,6 +3,7 @@
 ## v0.1.3
 
 * Added action/workflow to delete dns record and all associated related records and PTR records.
+* Added action/workflow to return FQDN based on name and DNS Zone Reference.
 * Added action/workflow to test if a hostname is available or not
 * Added action/workflow to test credentials against the Men&Mice server.
 
