@@ -295,7 +295,7 @@ result:
 
 In addition to the actions above there are a few additional actions that we will discuss here.
 
-`remove_dns_record`: Action will find the DNS record and get any related records(CNAME, AAAA, etc) tied to that record and the pointer record. Then removes all the records so that there are no orphaned records left behind. Once the records are removed we then flush the cache for just the records that were removed.
+`remove_dns_record`: Action will find the DNS record and get any related records(CNAME, AAAA, etc) tied to that record and the pointer record. Then remove all the records so that there are no orphaned records left behind. Once the records are removed we then flush the cache for just the records that were removed.
 ``` shell
 $ st2 run menandmice.remove_dns_record server=menandmice.domain.tld username=administrator password=xxx name="test-name" dns_domain="domain.tld" ip_address='1.1.1.1'
 .................
