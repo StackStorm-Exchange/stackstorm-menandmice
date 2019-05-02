@@ -16,7 +16,7 @@ Data types and payloads also mirror one-for-one.
     ``` shell
     st2 pack install menandmice
     ```
-    
+
 2. Execute an action (example: list all DNS Zones)
 
     ``` shell
@@ -33,7 +33,7 @@ is `/opt/stackstorm/config/menandmice.yaml`.
 **Note** : `st2 pack config` doesn't handle schemas refernences very well (known bug)
     so it's best to create the configuraiton file yourself and copy it into
     `/opt/stackstorm/configs/menandmice.yaml` then run `st2ctl reload --register-configs`
-    
+
 ## <a name="Schema"></a> Schema
 
 ``` yaml
@@ -83,14 +83,14 @@ menandmice:
 
 # Actions
 
-Actions in this pack are auto-generated from the Men&Mice IPAM 
+Actions in this pack are auto-generated from the Men&Mice IPAM
 [SOAP API](http://api.menandmice.com/8.2.0/) operations defined in the WSDL file
 (note: we store these WSDLs in the `etc/` directory of this pack). There is
 an action created for every "Command" in the Men&Mice API. Input and output
 parameters should be the same with all action names and action parameters
 convert from CamelCase to snake_case. Example: SOAP command [AddDNSServer](http://api.menandmice.com/8.1.0/#AddDNSServer)
 will be converted to snake_case for the action to become `menandmice.add_dns_server`.
-In this same command one of the arguments is `dnsServer` that becomes the 
+In this same command one of the arguments is `dnsServer` that becomes the
 `dns_server` action parameter.
 
 
@@ -104,12 +104,12 @@ $ st2 run menandmice.get_dns_zones server=menandmice.domain.tld username=adminis
 .................
 id: 59555e63a814c0698925a1aa
 status: succeeded
-parameters: 
+parameters:
   filter: 'type: Master'
   password: '********'
   server: menandmice.domain.tld
   username: administrator
-result: 
+result:
   exit_code: 0
   result:
     dnsZones:
@@ -145,9 +145,9 @@ over/over can become tedious and repetitive, luckyily there is a better way.
 ## <a name="UsageConfig"></a> Usage - Config Connection
 
 This pack is designed to store commonly used connection information in the pack's
-config file located in `/opt/stackstorm/config/menandmice.yaml`. The connection 
+config file located in `/opt/stackstorm/config/menandmice.yaml`. The connection
 info is specified in the config once, and then referenced by name within an
-action and/or workflow. 
+action and/or workflow.
 
 Using the action from the basic example, we can enter this connection information
 in our config:
@@ -174,10 +174,10 @@ This pays off big time when running multiple commands in sequence.
 
 ## <a name="UsageLogin"></a> Usage - Login Sessions
 
-By default this pack performs a login operation in every action if the `session` 
+By default this pack performs a login operation in every action if the `session`
 parameter is not passed in. To avoid these repetitive logins under the hood
 we can perform the login operation and then re-use the login session cookie
-in all subsequent actions within a workflow. 
+in all subsequent actions within a workflow.
 
 **Note**: When using a cached login session you still need to pass in a `server`
           parameter either as an action parameter or as part of the `connection`.
@@ -188,7 +188,7 @@ in all subsequent actions within a workflow.
 version: '2.0'
 
 menandmice.wf_login_sessions:
-  description: 
+  description:
   input:
     - connection
     - server
@@ -206,7 +206,7 @@ menandmice.wf_login_sessions:
         - login
         - get_dns_servers
         - get_dns_zones
-        
+
     login:
       action: menandmice.login
       input:
@@ -220,7 +220,7 @@ menandmice.wf_login_sessions:
         session: "{{ task('login').result.result.session }}"
       on-error:
         fail
-    
+
     get_dns_servers:
       workflow: menandmice.get_dns_servers
       input:
@@ -252,7 +252,7 @@ To facilitate this all command arguments that take complex object types map
 to action arguments of type `object`. This means that the data passed into this
 parameter can be a python `dict` or `list`, making it work like a native datastructure
 within workflows. Also, on the commandline using `st2 run` we an specify these
-type of objects using a JSON string that will then be auto-converted into 
+type of objects using a JSON string that will then be auto-converted into
 a python `dict` or `list` when the commandline argument is parsed.
 
 Navigating the SOAP documentation can be a little cumbersome, so to help users
@@ -268,7 +268,7 @@ $ st2 run menandmice.add_dns_records server=menandmice.domain.tld username=admin
 ..
 id: 59556158a814c03b10b9999
 status: succeeded
-parameters: 
+parameters:
   dns_records:
     dnsRecord:
     - data: 10.1.2.100
@@ -279,7 +279,7 @@ parameters:
   password: '********'
   server: menandmice.domain.tld
   username: administrator
-result: 
+result:
   exit_code: 0
   result:
     errors: null
@@ -291,8 +291,83 @@ result:
 
 ```
 
+## <a name="UsageAdditionalActions"></a> Usage - Additional Actions
+
+In addition to the actions above there are a few additional actions that we will discuss here.
+
+`remove_dns_record`: Action will find the DNS record and get any related records(CNAME, AAAA, etc) tied to that record and the pointer record. Then removes all the records so that there are no orphaned records left behind. Once the records are removed we then flush the cache for just the records that were removed.
+``` shell
+$ st2 run menandmice.remove_dns_record server=menandmice.domain.tld username=administrator password=xxx name="test-name" dns_domain="domain.tld" ip_address='1.1.1.1'
+.................
+id: 5cca09f449b3d27e56a56cca
+action.ref: menandmice.remove_dns_record
+parameters:
+  dns_domain: domain.tld
+  ip_address: 1.1.1.1
+  name: test-name
+  password: '***'
+  server: menandmice.domain.tld
+  username: administrator
+status: succeeded
+```
+
+`test_credentials`: Action will attempt to log into the Men & Mice Server with the credential provided to test if logins are successfull or failed.
+``` shell
+$ st2 run menandmice.test_credentials server=menandmice.domain.tld username=administrator password=xxx name="test-name"
+...
+id: 5cc9f09749b3d27e56a56baa
+action.ref: menandmice.test_credentials
+parameters:
+  password: '***'
+  server: menandmice.domain.tld
+  username: administrator
+status: succeeded (5s elapsed)
+result_task: main
+result:
+  exit_code: 0
+  result:
+    session: JfY0AgQCMhjuDyKjDOrc
+  stderr: ''
+  stdout: ''
+```
+
+`test_hostname`: Action will check to see if a hostname is available for use or not in the DNS Domain. Action will **Fail** if the hostname is already taken and **Succeed** if the hostname is available for use.
+Taken name:
+``` shell
+$ st2 run menandmice.test_hostname server=menandmice.domain.tld username=administrator password=xxx hostname='test-name' dns_domain='domain.tld'
+.....
+id: 5cc9f35449b3d27e56a56c8d
+action.ref: menandmice.test_hostname
+parameters:
+  dns_domain: domain.tld
+  hostname: test-name
+  password: '***'
+  server: menandmice.domain.tld
+  username: administrator
+status: failed
+start_timestamp: Wed, 01 May 2019 19:28:20 UTC
+end_timestamp: Wed, 01 May 2019 19:28:30 UTC
+```
+
+Available name:
+``` shell
+$ st2 run menandmice.test_hostname server=menandmice.domain.tld username=administrator password=xxx hostname='test-name-2' dns_domain='domain.tld'
+.....
+id: 5cc9f35449b3d27e56a56c8d
+action.ref: menandmice.test_hostname
+parameters:
+  dns_domain: domain.tld
+  hostname: test-name-2
+  password: '***'
+  server: menandmice.domain.tld
+  username: administrator
+status: succeeded
+start_timestamp: Wed, 01 May 2019 19:28:20 UTC
+end_timestamp: Wed, 01 May 2019 19:28:30 UTC
+```
+
 For another example see `actions/workflows/wf_add_dns_zone.yaml`. The `build_master_zone:`
-task creates a `DNSZone` object and publishes it to the `master_zone` variable. 
+task creates a `DNSZone` object and publishes it to the `master_zone` variable.
 Then in the `add_master_zone:` task we pass the `DNSZone` object `master_zone`
 into the `dns_zone` parameter for the `menandmice.add_dns_zone` action.
 
