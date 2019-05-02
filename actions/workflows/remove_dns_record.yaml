@@ -1,0 +1,153 @@
+version: '2.0'
+
+menandmice.remove_dns_record:
+  description: >
+    This is a workflow to delete DNS records out of Men&Mice
+  type: direct
+  input:
+    - connection
+    - server
+    - username
+    - password
+    - port
+    - transport
+    - session
+    - dns_domain
+    - ip_address
+    - name
+
+  tasks:
+    main:
+      action: std.noop
+      on-success:
+        - login: "{{ _.session == '' }}"
+        - get_dns_servers: "{{ _.session != '' }}"
+
+    login:
+      action: menandmice.login
+      input:
+        connection: "{{ _.connection }}"
+        server: "{{ _.server }}"
+        username: "{{ _.username }}"
+        password: "{{ _.password }}"
+        port: "{{ _.port }}"
+        transport: "{{ _.transport }}"
+      publish:
+        session: "{{ task('login').result.result.session }}"
+      on-success:
+        - get_dns_servers
+
+    # Gets all DNS servers
+    get_dns_servers:
+      action: menandmice.get_dns_servers
+      input:
+        server: "{{ _.server }}"
+        session: "{{ _.session }}"
+        transport: "{{ _.transport }}"
+      publish:
+        # note: flatten() is needed because otherwise it's an array of arrays
+        dns_server_refs: <% task(get_dns_servers).result.result.dnsServers.dnsServer.ref.flatten() %>
+      on-success:
+        - get_dns_zone
+
+    get_dns_zone:
+      action: menandmice.get_dns_zones
+      input:
+        server: "{{ _.server }}"
+        session: "{{ _.session }}"
+        transport: "{{ _.transport }}"
+        filter: "type:^Master$ name:^{{ _.dns_domain }}.$"
+      publish:
+        dns_zone_ref: "{{ task('get_dns_zone').result.result.dnsZones.dnsZone[0].ref }}"
+      on-success:
+        - get_dns_record
+
+    # Does not allow duplicates to be added
+    get_dns_record:
+      action: menandmice.get_dns_records
+      input:
+        server: "{{ _.server }}"
+        session: "{{ _.session }}"
+        transport: "{{ _.transport }}"
+        dns_zone_ref: "{{ _.dns_zone_ref }}"
+        filter: "name:{{ _.name }} AND type:A"
+      publish:
+        dns_record_ref: "{{ task('get_dns_record').result.result.dnsRecords.dnsRecord[0].ref }}"
+        dns_record: "{{ task('get_dns_record').result.result.dnsRecords.dnsRecord[0] }}"
+      on-success:
+        - get_related_records
+
+    # Can potentially have many records or None
+    get_related_records:
+      action: menandmice.get_related_dns_records
+      input:
+        server: "{{ _.server }}"
+        session: "{{ _.session }}"
+        transport: "{{ _.transport }}"
+        dns_record_ref: "{{ _.dns_record_ref }}"
+      publish:
+        dns_releated_records_refs: "{{ task('get_related_records').result.result | map(attribute='ref') | list if task('get_related_records').result.result != None else [] }}"
+        dns_releated_records: "{{ task('get_related_records').result.result if task('get_related_records').result.result != None else [] }}"
+      on-success:
+        - get_dns_ptr_record
+
+    # Does not allow duplicates to be added
+    get_dns_ptr_record:
+      action: menandmice.get_dnsptr_records
+      input:
+        server: "{{ _.server }}"
+        session: "{{ _.session }}"
+        transport: "{{ _.transport }}"
+        address: "{{ _.ip_address }}"
+        dns_zone_ref: "{{ _.dns_zone_ref }}"
+      publish:
+        dns_ptr_ref: "{{ task('get_dns_ptr_record').result.result.reverseRecords.dnsRecord[0].ref }}"
+        ptr_record: "{{ task('get_dns_ptr_record').result.result.reverseRecords.dnsRecord[0] }}"
+      on-success:
+        - merge_records
+
+    merge_records:
+      action: std.noop
+      publish:
+        records_to_remove: "{{ [ _.dns_record_ref, _.dns_ptr_ref ] + _.dns_releated_records_refs }}"
+        dns_records_to_flush: "{{ [ _.dns_record, _.ptr_record ] + _.dns_releated_records }}"
+      on-success:
+        - resolve_fqdn
+
+    # DNS records only come in with the hostname. We need to convert to FQDNs
+    resolve_fqdn:
+      with-items: "record in {{ _.dns_records_to_flush }}"
+      action: menandmice.resolve_fqdn
+      input:
+        server: "{{ _.server }}"
+        session: "{{ _.session }}"
+        transport: "{{ _.transport }}"
+        dns_zone_ref: "{{ _.record.dnsZoneRef }}"
+        name: "{{ _.record.name }}"
+      publish:
+        # This is done in YAQL because it automatically returns as an array
+        entries_to_flush: <% task('resolve_fqdn').result.fqdn %>
+      on-success:
+        - remove_dns_records
+
+    remove_dns_records:
+      action: menandmice.remove_objects
+      input:
+        server: "{{ _.server }}"
+        session: "{{ _.session }}"
+        transport: "{{ _.transport }}"
+        obj_refs:
+          ref: "{{ _.records_to_remove }}"
+      on-success:
+        - flush_dns_cache
+
+    flush_dns_cache:
+      with-items: "entry in {{ _.entries_to_flush }}"
+      action: menandmice.flush_from_cache_on_dns_servers
+      input:
+        session: "{{ _.session }}"
+        server: "{{ _.server }}"
+        transport: "{{ _.transport }}"
+        dns_server_refs:
+          ref: "{{ _.dns_server_refs }}"
+        entry: "{{ _.entry }}"
