@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.1.4
+
+* Added action/workflow to get all dns records and related records in a given dns zone.
+* Added action/workflow to claim a dns record.
+  Contributed by Bradley Bishop (Encore Technologies)
+
 ## v0.1.3
 
 * Added action/workflow to delete dns record and all associated related records and PTR records.
