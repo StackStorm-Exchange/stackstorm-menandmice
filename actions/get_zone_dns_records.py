@@ -1,10 +1,21 @@
 from st2common.runners.base_action import Action
+import requests
 
 
 class GetZoneDNSRecords(Action):
 
     def __init__(self, config):
         super(GetZoneDNSRecords, self).__init__(config)
+
+    def check_dns_name(self, name):
+        """DNS names have to have a . at the end of the name for
+        Men and Mice to see it properly and not append additional
+        Information.
+        """
+        if not name.endswith('.'):
+            name += '.'
+
+        return name
 
     def get_dns_zone(self, url, client, dns_domain):
         """Query the Men and Mice API for the DNS Name to get the
@@ -95,10 +106,10 @@ class GetZoneDNSRecords(Action):
         Do auth here and pass that along with the client. Also we build
         the base url that can just be appended as needed in later calls
         """
-        server = self.get_arg("server", kwargs_dict)
-        username = self.get_arg("username", kwargs_dict)
-        password = self.get_arg("password", kwargs_dict)
-        transport = self.get_arg("transport", kwargs_dict)
+        server = kwargs_dict['server']
+        username = kwargs_dict['username']
+        password = kwargs_dict['password']
+        transport = kwargs_dict['transport']
         url = "{0}://{1}/mmws/api".format(transport, server)
 
         client = requests.Session()
@@ -113,10 +124,8 @@ class GetZoneDNSRecords(Action):
         """Main entry point for the StackStorm actions to get all the information
         needed to build the dns entry from scratch.
         """
-        kwargs_dict = dict(kwargs)
-
         dns_domain = kwargs['dns_domain']
-        url, client = self.mm_build_client(kwargs_dict)
+        url, client = self.mm_build_client(kwargs)
 
         dns_zone_ref = self.get_dns_zone(url, client, dns_domain)
         dns_records = self.get_dns_records(url, client, dns_zone_ref)

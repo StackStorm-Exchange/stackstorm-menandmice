@@ -1,4 +1,4 @@
-from encore_base_action_test_case import EncoreBaseActionTestCase
+from men_and_mice_base_action_test_case import MenAndMiceBaseActionTestCase
 
 from get_zone_dns_records import GetZoneDNSRecords
 from st2common.runners.base_action import Action
@@ -7,7 +7,7 @@ import mock
 import requests
 
 
-class GetZoneDNSRecordsTestCase(EncoreBaseActionTestCase):
+class GetZoneDNSRecordsTestCase(MenAndMiceBaseActionTestCase):
     __test__ = True
     action_cls = GetZoneDNSRecords
 
@@ -33,6 +33,20 @@ class GetZoneDNSRecordsTestCase(EncoreBaseActionTestCase):
         action = self.get_action_instance({})
         self.assertIsInstance(action, GetZoneDNSRecords)
         self.assertIsInstance(action, Action)
+
+    def test_check_dns_name_missing(self):
+        action = self.get_action_instance({})
+        test_name = "test.home.local"
+        expected_value = "test.home.local."
+        result_value = action.check_dns_name(test_name)
+        self.assertEqual(result_value, expected_value)
+
+    def test_check_dns_name_not_missing(self):
+        action = self.get_action_instance({})
+        test_name = "test.home.local."
+        expected_value = "test.home.local."
+        result_value = action.check_dns_name(test_name)
+        self.assertEqual(result_value, expected_value)
 
     @mock.patch('get_zone_dns_records.GetZoneDNSRecords.mm_build_client')
     def test_get_dns_zone_success(self, mock_client):
