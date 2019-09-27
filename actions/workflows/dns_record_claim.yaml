@@ -1,0 +1,125 @@
+---
+version: 1.0
+
+description: This is a workflow to claim a dns record in Men and Mice. We will get the next available ip address in the given range if not given.
+
+input:
+  - connection
+  - server
+  - username
+  - password
+  - port
+  - transport
+  - session
+  - dns_domain
+  - hostname
+  - ip_address
+  - range_name
+  - record_enabled
+  - record_type
+  - related_record_name
+
+output:
+  - ip_address: "{{ ctx().ip_address }}"
+  - dns_record: "{{ ctx().dns_record }}"
+
+tasks:
+  main:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() }}"
+        do:
+        - login: "{{ ctx().session == '' }}"
+        - dispatch: "{{ ctx().session != '' }}"
+
+  login:
+    action: menandmice.login
+    input:
+      connection: "{{ ctx().connection }}"
+      server: "{{ ctx().server }}"
+      username: "{{ ctx().username }}"
+      password: "{{ ctx().password }}"
+      port: "{{ ctx().port }}"
+      transport: "{{ ctx().transport }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - session: "{{ result().result.session }}"
+        do:
+          - dispatch
+
+  dispatch:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() }}"
+        do:
+        # We only need an IP address for record if its an A record
+        - get_range: "{{ ctx().record_type == A and not ctx().ip_address }}"
+        - get_dns_zone: "{{ ctx().record_type == A and ctx().ip_address }}"
+        - get_dns_zone: "{{ ctx().record_type != A }}"
+
+  get_range:
+    action: menandmice.get_ranges
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      filter: "^{{ ctx().range_name }}$"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - range_ref: "{{ result().result.ranges[0].ref }}"
+        do:
+          - get_next_ip_address
+
+  # Get the next available ip address
+  get_next_ip_address:
+    action: menandmice.get_next_free_address
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      range_ref: "{{ ctx().range_ref }}"
+      temporary_claim_time: 1
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - ip_address: "{{ result().result.address }}"
+        do:
+          - get_dns_zone
+
+  get_dns_zone:
+    action: menandmice.get_dns_zones
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      filter: "type:^Master$ name:^{{ ctx().dns_domain }}.$"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - dns_zone_ref: "{{ result().result.dnsZones.dnsZone[0].ref }}"
+        do:
+          - build_dns_record
+
+  build_dns_record:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - dns_record:
+              name: "{{ ctx().hostname }}"
+              type: "{{ ctx().record_type }}"
+              data: "{{ ctx().ip_address if ctx().record_type == A else ctx().related_record_name }}"
+              enabled: "{{ ctx().record_enabled }}"
+              dnsZoneRef: "{{ ctx().dns_zone_ref }}"
+        do:
+          - add_dns_record
+
+  add_dns_record:
+    action: menandmice.add_dns_record
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      dns_record: "{{ ctx().dns_record }}"

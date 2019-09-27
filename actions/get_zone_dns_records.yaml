@@ -1,0 +1,33 @@
+---
+description: "This is a workflow to get DNS records out of Men&Mice zone"
+enabled: true
+runner_type: "python-script"
+entry_point: get_zone_dns_records.py
+name: get_zone_dns_records
+pack: encore
+parameters:
+  server:
+    type: string
+    description: "The FQDN of the Men and Mice server"
+    required: true
+    default: "{{ st2kv.system.menandmice.server }}"
+  username:
+    type: string
+    description: "Username to log into the Men and Mice server"
+    required: true
+    default: "{{ st2kv.system.menandmice.username }}"
+  password:
+    type: string
+    description: "Password to log into the Men and Mice server"
+    required: true
+    default: "{{ st2kv.system.menandmice.password | decrypt_kv }}"
+    secret: true
+  transport:
+    type: string
+    description: "transport needed to log into the Men and Mice server ex. http, https"
+    required: true
+    default: "{{ st2kv.system.menandmice.transport }}"
+  dns_domain:
+    type: string
+    description: "DNS name of the record eg. 'domain.tld'"
+    required: true
