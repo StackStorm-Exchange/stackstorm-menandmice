@@ -89,6 +89,14 @@ menandmice.remove_dns_record:
         dns_releated_records_refs: "{{ task('get_related_records').result.result | map(attribute='ref') | list if task('get_related_records').result.result != None else [] }}"
         dns_releated_records: "{{ task('get_related_records').result.result if task('get_related_records').result.result != None else [] }}"
       on-success:
+        - merge_records
+
+    merge_records:
+      action: std.noop
+      publish:
+        records_to_remove: "{{ [ _.dns_record_ref ] + _.dns_releated_records_refs }}"
+        dns_records_to_flush: "{{ [ _.dns_record ] + _.dns_releated_records }}"
+      on-success:
         - get_dns_ptr_record
 
     # Does not allow duplicates to be added
@@ -101,16 +109,8 @@ menandmice.remove_dns_record:
         address: "{{ _.ip_address }}"
         dns_zone_ref: "{{ _.dns_zone_ref }}"
       publish:
-        dns_ptr_ref: "{{ task('get_dns_ptr_record').result.result.reverseRecords.dnsRecord[0].ref }}"
-        ptr_record: "{{ task('get_dns_ptr_record').result.result.reverseRecords.dnsRecord[0] }}"
-      on-success:
-        - merge_records
-
-    merge_records:
-      action: std.noop
-      publish:
-        records_to_remove: "{{ [ _.dns_record_ref, _.dns_ptr_ref ] + _.dns_releated_records_refs }}"
-        dns_records_to_flush: "{{ [ _.dns_record, _.ptr_record ] + _.dns_releated_records }}"
+        records_to_remove: "{{ _.records_to_remove + [ task('get_dns_ptr_record').result.result.reverseRecords.dnsRecord[0].ref ] if task('get_dns_ptr_record').result.result.totalResults != 0 else _.records_to_remove }}"
+        dns_records_to_flush: "{{ _.dns_records_to_flush + [ task('get_dns_ptr_record').result.result.reverseRecords.dnsRecord[0] ] if task('get_dns_ptr_record').result.result.totalResults != 0 else _.dns_records_to_flush }}"
       on-success:
         - resolve_fqdn
 
