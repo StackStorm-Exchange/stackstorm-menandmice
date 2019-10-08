@@ -1,7 +1,7 @@
 ---
 description: "Test hostname to see if it is already in use in Men&Mice"
 enabled: true
-runner_type: "mistral-v2"
+runner_type: orquesta
 entry_point: workflows/test_hostname.yaml
 name: test_hostname
 pack: menandmice

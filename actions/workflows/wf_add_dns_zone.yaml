@@ -1,89 +1,108 @@
-version: '2.0'
+---
+version: 1.0
 
-menandmice.wf_add_dns_zone:
-  description: >
-    A sample workflow that demonstrates how to create a master DNS zone.
-    type: direct
-  input:
-    - session
-    - connection
-    - server
-    - username
-    - password
-    - port
-    - transport
-    - zone_name
-    - master_server
-  output:
-    master_server_ref: "{{ _.master_server_ref }}"
-    master_server_ip: "{{ _.master_server_ip }}"
-    master_view_ref: "{{ _.master_view_ref }}"
-    master_zone_ref: "{{ _.master_zone_ref }}"
-  tasks:
-    main:
-      action: std.noop
-      on-success:
-        - login: "{{ not _.session }}"
-        - get_master_server
+description: A sample workflow that demonstrates how to create a master DNS zone.
 
-    login:
-      action: menandmice.login
-      input:
-        connection: "{{ _.connection }}"
-        server: "{{ _.server }}"
-        username: "{{ _.username }}"
-        password: "{{ _.password }}"
-        port: "{{ _.port }}"
-        transport: "{{ _.transport }}"
-      publish:
-        session: "{{ task('login').result.result.session }}"
-    
-    get_master_server:
-      action: menandmice.get_dns_servers
-      input:
-        session: "{{ _.session }}"
-        server: "{{ _.server }}"
-        filter: "name: {{ _.master_server }}"
-      publish:
-        master_server_obj: "{{ task('get_master_server').result.result.dnsServers.dnsServer[0] }}"
-      on-success:
-        - parse_master_server
+input:
+  - session
+  - connection
+  - server
+  - username
+  - password
+  - port
+  - transport
+  - zone_name
+  - master_server
 
-    parse_master_server:
-      action: std.noop
-      publish:
-        master_server_ref: "{{ _.master_server_obj.ref }}"
-        master_server_ip: "{{ _.master_server_obj.address }}"
-      on-success:
-        - get_master_view
+tasks:
+  main:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and (ctx().session == '') }}"
+        do:
+          - login
+      - when: "{{ succeeded() and (ctx().session != '') }}"
+        do:
+          - get_master_server
 
-    get_master_view:
-      action: menandmice.get_dns_views
-      input:
-        session: "{{ _.session }}"
-        server: "{{ _.server }}"
-        dns_server_ref: "{{ _.master_server_ref }}"
-      publish:
-        master_view_ref: "{{ task('get_master_view').result.result.dnsViews.dnsView[0].ref }}"
-      on-success:
-        - build_master_zone
+  login:
+    action: menandmice.login
+    input:
+      connection: "{{ ctx().connection }}"
+      server: "{{ ctx().server }}"
+      username: "{{ ctx().username }}"
+      password: "{{ ctx().password }}"
+      port: "{{ ctx().port }}"
+      transport: "{{ ctx().transport }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - session: "{{ result().result.session }}"
+        do:
+          - get_master_server
 
-    build_master_zone:
-      action: std.noop
-      publish:
-        master_zone:
-          name: "{{ _.zone_name }}"
-          dnsViewRef: "{{ _.master_view_ref }}"
-          authority: "{{ _.master_server }}"
-          type: "Master"
-      on-success:
-        - add_master_zone
+  get_master_server:
+    action: menandmice.get_dns_servers
+    input:
+      session: "{{ ctx().session }}"
+      server: "{{ ctx().server }}"
+      filter: "name: {{ ctx().master_server }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - master_server_obj: "{{ result().result.dnsServers.dnsServer[0] }}"
+        do:
+          - parse_master_server
 
-    add_master_zone:
-      action: menandmice.add_dns_zone
-      input:
-        session: "{{ _.session }}"
-        server: "{{ _.server }}"
-        dns_zone: "{{ _.master_zone }}"
-      publish:
-        master_zone_ref: "{{ task('add_master_zone').result.result }}"
+  parse_master_server:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - master_server_ref: "{{ ctx().master_server_obj.ref }}"
+          - master_server_ip: "{{ ctx().master_server_obj.address }}"
+        do:
+          - get_master_view
+
+  get_master_view:
+    action: menandmice.get_dns_views
+    input:
+      session: "{{ ctx().session }}"
+      server: "{{ ctx().server }}"
+      dns_server_ref: "{{ ctx().master_server_ref }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - master_view_ref: "{{ result().result.dnsViews.dnsView[0].ref }}"
+        do:
+          - build_master_zone
+
+  build_master_zone:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - master_zone:
+              name: "{{ ctx().zone_name }}"
+              dnsViewRef: "{{ ctx().master_view_ref }}"
+              authority: "{{ ctx().master_server }}"
+              type: Master
+        do:
+          - add_master_zone
+
+  add_master_zone:
+    action: menandmice.add_dns_zone
+    input:
+      session: "{{ ctx().session }}"
+      server: "{{ ctx().server }}"
+      dns_zone: "{{ ctx().master_zone }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - master_zone_ref: "{{ result().result }}"
+
+output:
+  - master_server_ref: "{{ ctx().master_server_ref }}"
+  - master_server_ip: "{{ ctx().master_server_ip }}"
+  - master_view_ref: "{{ ctx().master_view_ref }}"
+  - master_zone_ref: "{{ ctx().master_zone_ref }}"

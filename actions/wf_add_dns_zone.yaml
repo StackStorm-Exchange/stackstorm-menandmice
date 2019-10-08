@@ -1,6 +1,7 @@
 ---
-description: Create master DNS zone
+description: "Create master DNS zone"
 enabled: true
+runner_type: orquesta
 entry_point: workflows/wf_add_dns_zone.yaml
 name: wf_add_dns_zone
 pack: menandmice
@@ -42,4 +43,3 @@ parameters:
     type: string
     description: "Hostname of the master DNS server for this new zone."
     required: true
-runner_type: mistral-v2

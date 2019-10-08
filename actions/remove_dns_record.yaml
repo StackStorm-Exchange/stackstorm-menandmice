@@ -1,7 +1,7 @@
 ---
 description: "This is a workflow to delete DNS records out of Men&Mice"
 enabled: true
-runner_type: "mistral-v2"
+runner_type: orquesta
 entry_point: workflows/remove_dns_record.yaml
 name: remove_dns_record
 pack: menandmice
