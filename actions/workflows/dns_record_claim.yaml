@@ -19,6 +19,9 @@ input:
   - record_type
   - related_record_name
 
+vars:
+  - dns_record: null
+
 output:
   - ip_address: "{{ ctx().ip_address }}"
   - dns_record: "{{ ctx().dns_record }}"
@@ -27,10 +30,12 @@ tasks:
   main:
     action: core.noop
     next:
-      - when: "{{ succeeded() }}"
+      - when: "{{ succeeded() and (ctx().session == '') }}"
         do:
-        - login: "{{ ctx().session == '' }}"
-        - dispatch: "{{ ctx().session != '' }}"
+          - login
+      - when: "{{ succeeded() and (ctx().session != '') }}"
+        do:
+          - dispatch
 
   login:
     action: menandmice.login
@@ -51,12 +56,16 @@ tasks:
   dispatch:
     action: core.noop
     next:
-      - when: "{{ succeeded() }}"
+          # We only need an IP address for record if its an A record
+      - when: "{{ succeeded() and (ctx().record_type == 'A' and not ctx().ip_address) }}"
         do:
-        # We only need an IP address for record if its an A record
-        - get_range: "{{ ctx().record_type == A and not ctx().ip_address }}"
-        - get_dns_zone: "{{ ctx().record_type == A and ctx().ip_address }}"
-        - get_dns_zone: "{{ ctx().record_type != A }}"
+          - get_range
+      - when: "{{ succeeded() and (ctx().record_type == 'A' and ctx().ip_address) }}"
+        do:
+          - get_dns_zone
+      - when: "{{ succeeded() and (ctx().record_type != 'A') }}"
+        do:
+          - get_dns_zone
 
   get_range:
     action: menandmice.get_ranges
@@ -68,7 +77,7 @@ tasks:
     next:
       - when: "{{ succeeded() }}"
         publish:
-          - range_ref: "{{ result().result.ranges[0].ref }}"
+          - range_ref: "{{ result().result.ranges.range[0].ref }}"
         do:
           - get_next_ip_address
 
@@ -84,7 +93,7 @@ tasks:
     next:
       - when: "{{ succeeded() }}"
         publish:
-          - ip_address: "{{ result().result.address }}"
+          - ip_address: "{{ result().result }}"
         do:
           - get_dns_zone
 
@@ -110,7 +119,7 @@ tasks:
           - dns_record:
               name: "{{ ctx().hostname }}"
               type: "{{ ctx().record_type }}"
-              data: "{{ ctx().ip_address if ctx().record_type == A else ctx().related_record_name }}"
+              data: "{{ ctx().ip_address if ctx().record_type == 'A' else ctx().related_record_name }}"
               enabled: "{{ ctx().record_enabled }}"
               dnsZoneRef: "{{ ctx().dns_zone_ref }}"
         do:
