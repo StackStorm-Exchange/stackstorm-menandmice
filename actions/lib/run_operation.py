@@ -12,6 +12,8 @@ CONFIG_CONNECTION_KEYS = [('server', True, ""),
                           ('transport', False, "https"),
                           ('wsdl_endpoint', False, "_mmwebext/mmwebext.dll?wsdl")]
 
+PARAM_OVERIRDES = {'exclude_dhcp': 'excludeDHCP'}
+
 
 class RunOperation(Action):
 
@@ -27,7 +29,13 @@ class RunOperation(Action):
         :param snake_cased_str: snake cased string
         :returns: string converted into camel case
         """
-        return self._convert_to_camel(snake_cased_str, "_")
+        camel_cased_return = ""
+        if snake_cased_str in PARAM_OVERIRDES.keys():
+            camel_cased_return = PARAM_OVERIRDES[snake_cased_str]
+        else:
+            camel_cased_return = self._convert_to_camel(snake_cased_str, "_")
+
+        return camel_cased_return
 
     def _convert_to_camel(self, snake_cased_str, separator):
         components = snake_cased_str.split(separator)

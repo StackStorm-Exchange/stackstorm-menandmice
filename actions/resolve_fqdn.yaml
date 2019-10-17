@@ -1,10 +1,10 @@
 ---
 description: "Create an fqdn from the Men&Mice name and Zone info"
 enabled: true
+runner_type: orquesta
 entry_point: workflows/resolve_fqdn.yaml
 name: resolve_fqdn
 pack: menandmice
-runner_type: "mistral-v2"
 parameters:
   connection:
     type: string

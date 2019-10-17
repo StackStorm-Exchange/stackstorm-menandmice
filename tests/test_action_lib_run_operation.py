@@ -26,6 +26,13 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         result = action.snake_to_camel(snake)
         self.assertEqual(result, camel)
 
+    def test_snake_to_camel_exclude_dhcp(self):
+        action = self.get_action_instance({})
+        snake = "exclude_dhcp"
+        camel = "excludeDHCP"
+        result = action.snake_to_camel(snake)
+        self.assertEqual(result, camel)
+
     def test_get_del_arg_present(self):
         action = self.get_action_instance({})
         test_dict = {"key1": "value1",
