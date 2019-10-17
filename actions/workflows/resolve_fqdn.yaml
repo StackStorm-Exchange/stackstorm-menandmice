@@ -1,50 +1,57 @@
-version: '2.0'
+---
+version: 1.0
 
-menandmice.resolve_fqdn:
-  description: >
-    Create an fqdn from the M&M name and Zone info
-  type: direct
-  input:
-    - connection
-    - server
-    - username
-    - password
-    - port
-    - transport
-    - session
-    - dns_zone_ref
-    - name
+description: Create an fqdn from the M&M name and Zone info
 
-  output:
-    fqdn: "{{ _.fqdn }}"
+input:
+  - connection
+  - server
+  - username
+  - password
+  - port
+  - transport
+  - session
+  - dns_zone_ref
+  - name
 
-  tasks:
-    main:
-      action: std.noop
-      on-success:
-        - login: "{{ _.session == '' }}"
-        - get_dns_zone: "{{ _.session != '' }}"
+tasks:
+  main:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and (ctx().session == '') }}"
+        do:
+          - login
+      - when: "{{ succeeded() and (ctx().session != '') }}"
+        do:
+          - get_dns_zone
 
-    login:
-      action: menandmice.login
-      input:
-        connection: "{{ _.connection }}"
-        server: "{{ _.server }}"
-        username: "{{ _.username }}"
-        password: "{{ _.password }}"
-        port: "{{ _.port }}"
-        transport: "{{ _.transport }}"
-      publish:
-        session: "{{ task('login').result.result.session }}"
-      on-success:
-        - get_dns_zone
+  login:
+    action: menandmice.login
+    input:
+      connection: "{{ ctx().connection }}"
+      server: "{{ ctx().server }}"
+      username: "{{ ctx().username }}"
+      password: "{{ ctx().password }}"
+      port: "{{ ctx().port }}"
+      transport: "{{ ctx().transport }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - session: "{{ result().result.session }}"
+        do:
+          - get_dns_zone
 
-    get_dns_zone:
-      action: menandmice.get_dns_zone
-      input:
-        server: "{{ _.server }}"
-        session: "{{ _.session }}"
-        transport: "{{ _.transport }}"
-        dns_zone_ref: "{{ _.dns_zone_ref }}"
-      publish:
-        fqdn: "{{ _.name + '.' + task('get_dns_zone').result.result.name }}"
+  get_dns_zone:
+    action: menandmice.get_dns_zone
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      dns_zone_ref: "{{ ctx().dns_zone_ref }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - fqdn: "{{ ctx().name + '.' + result().result.name }}"
+
+output:
+  - fqdn: "{{ ctx().fqdn }}"
