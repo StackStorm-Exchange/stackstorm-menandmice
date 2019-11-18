@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.0.1
+
+* Fixed issue with test_credentials not exiting with fail.
+  Contributed by Bradley Bishop (Encore Technologies)
+
 ## v0.1.4
 
 * Added action/workflow to get all dns records and related records in a given dns zone.
