@@ -62,7 +62,7 @@ tasks:
       server: "{{ ctx().server }}"
       transport: "{{ ctx().transport }}"
       dns_zone_ref: "{{ ctx().dns_zone_ref }}"
-      filter: name:{{ ctx().hostname }}
+      filter: name={{ ctx().hostname }}
     next:
       - when: "{{ result().result.totalResults > 0 }}"
         do:
