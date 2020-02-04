@@ -7,6 +7,7 @@
 # Files generated
 #  actions/*.yaml (one for each operation in etc/menandmice_wsdl.xml)
 #
+from __future__ import print_function
 
 import argparse
 import datetime
@@ -64,19 +65,18 @@ class Cli:
         return args
 
     def examples(self):
-        print "examples:\n"\
-            "  # fetch the latest WSDL from the Men&Mice server/\n"\
-            "  ./action_generate.py fetch-wsdl -H host.domain.tld\n"\
-            "\n"\
-            "  # fetch the latest WSDL from the Men&Mice server to a specific name/\n"\
-            "  ./action_generate.py fetch-wsdl -H host.domain.tld -w menandmice_wsdl_new.xml\n"\
-            "\n"\
-            "  # gerenate actions from the latest WSDL/\n"\
-            "  ./action_generate.py generate\n"\
-            "\n"\
-            "  # gerenate actions into an alternate directory from a specific WSDL/\n"\
-            "  ./action_generate.py generate -d ../actions_new -w menandmice_wsdl_new.xml\n"\
-
+        print("examples:\n"
+              "  # fetch the latest WSDL from the Men&Mice server/\n"
+              "  ./action_generate.py fetch-wsdl -H host.domain.tld\n"
+              "\n"
+              "  # fetch the latest WSDL from the Men&Mice server to a specific name/\n"
+              "  ./action_generate.py fetch-wsdl -H host.domain.tld -w menandmice_wsdl_new.xml\n"
+              "\n"
+              "  # gerenate actions from the latest WSDL/\n"
+              "  ./action_generate.py generate\n"
+              "\n"
+              "  # gerenate actions into an alternate directory from a specific WSDL/\n"
+              "  ./action_generate.py generate -d ../actions_new -w menandmice_wsdl_new.xml\n")
 
 
 class ActionGenerator(object):
@@ -204,8 +204,8 @@ class ActionGenerator(object):
             # Ensure that this parameter doesn't conflict with any of the ones
             # we have defined in the aciton template
             if parameter_name in self.action_template_params:
-                print ("ERROR: Param conflicts with default: {}.{}"
-                       .format(op_name, parameter_name))
+                print("ERROR: Param conflicts with default: {}.{}"
+                      .format(op_name, parameter_name))
 
             if isinstance(input_type_obj, zeep.xsd.types.builtins.BuiltinType):
                 parameter_type = input_type_obj._default_qname.localname
