@@ -78,7 +78,7 @@ class GetZoneDNSRecordsTestCase(MenAndMiceBaseActionTestCase):
             action.get_dns_zone(test_dict['url'], mock_client, test_dict['dns_domain'])
 
         mock_client.get.assert_called_with("abc/DNSZones?filter=type:^Master$ name:^test.name.$")
-        self.assertTrue('Unknown Site' in context.exception)
+        self.assertTrue('Unknown Site' in str(context.exception))
 
     @mock.patch('get_zone_dns_records.GetZoneDNSRecords.mm_build_client')
     def test_get_dns_records_success(self, mock_client):
@@ -110,7 +110,7 @@ class GetZoneDNSRecordsTestCase(MenAndMiceBaseActionTestCase):
             action.get_dns_records(test_dict['url'], mock_client, test_dict['dns_zone_ref'])
 
         mock_client.get.assert_called_with("abc/test/123/DNSRecords?filter=type:^A$")
-        self.assertTrue('Unknown Site' in context.exception)
+        self.assertTrue('Unknown Site' in str(context.exception))
 
     @mock.patch('get_zone_dns_records.GetZoneDNSRecords.mm_build_client')
     def test_resolve_fqdn_success(self, mock_client):
@@ -163,7 +163,7 @@ class GetZoneDNSRecordsTestCase(MenAndMiceBaseActionTestCase):
             action.resolve_fqdn(test_dict['url'], mock_client, test_dict['dns_record'])
 
         mock_client.get.assert_called_with("abc/test/5")
-        self.assertTrue('Unknown Site' in context.exception)
+        self.assertTrue('Unknown Site' in str(context.exception))
 
     @mock.patch('get_zone_dns_records.GetZoneDNSRecords.resolve_fqdn')
     @mock.patch('get_zone_dns_records.GetZoneDNSRecords.mm_build_client')
@@ -220,7 +220,7 @@ class GetZoneDNSRecordsTestCase(MenAndMiceBaseActionTestCase):
                                            test_dict['dns_record_ref'])
 
         mock_client.get.assert_called_with("abc/test/123/RelatedDNSRecords")
-        self.assertTrue('Unknown Site' in context.exception)
+        self.assertTrue('Unknown Site' in str(context.exception))
 
     @mock.patch('get_zone_dns_records.GetZoneDNSRecords.get_dns_related_records')
     @mock.patch('get_zone_dns_records.GetZoneDNSRecords.mm_build_client')
