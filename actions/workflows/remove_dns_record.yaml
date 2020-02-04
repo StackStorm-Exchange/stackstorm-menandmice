@@ -76,7 +76,7 @@ tasks:
       session: "{{ ctx().session }}"
       transport: "{{ ctx().transport }}"
       dns_zone_ref: "{{ ctx().dns_zone_ref }}"
-      filter: name:{{ ctx().name }} AND type:A
+      filter: name={{ ctx().name }} AND type:A
     next:
       - when: "{{ succeeded() }}"
         publish:

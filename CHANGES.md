@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.0.2
+
+* Fixed issue with test_credentials and remove_dns_record where name filter was not correct.
+  Contributed by Bradley Bishop (Encore Technologies)
+
 ## v1.0.1
 
 * Fixed issue with test_credentials not exiting with fail.
