@@ -12,7 +12,8 @@ CONFIG_CONNECTION_KEYS = [('server', True, ""),
                           ('transport', False, "https"),
                           ('wsdl_endpoint', False, "_mmwebext/mmwebext.dll?wsdl")]
 
-PARAM_OVERIRDES = {'exclude_dhcp': 'excludeDHCP'}
+PARAM_OVERIRDES = {'exclude_dhcp': 'excludeDHCP',
+                   'include_related_dns_records': 'includeRelatedDNSRecords'}
 
 
 class RunOperation(Action):

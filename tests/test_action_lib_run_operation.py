@@ -33,6 +33,13 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         result = action.snake_to_camel(snake)
         self.assertEqual(result, camel)
 
+    def test_snake_to_camel_include_related_dns_records(self):
+        action = self.get_action_instance({})
+        snake = "include_related_dns_records"
+        camel = "includeRelatedDNSRecords"
+        result = action.snake_to_camel(snake)
+        self.assertEqual(result, camel)
+
     def test_get_del_arg_present(self):
         action = self.get_action_instance({})
         test_dict = {"key1": "value1",

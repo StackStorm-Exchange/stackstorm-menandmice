@@ -1,5 +1,13 @@
 # Change Log
 
+## v1.0.3
+
+* Added test_range action and workflow to test if range has available addresses
+* Added test_ip_address action and workflow to test if a given ip address is available for use
+* Updated dns_record_claim to test ip addresses if given and test range before claiming.
+* Updated dns_record_claim to flush dns cache after new record is created.
+  Contributed by Bradley Bishop (Encore Technologies)
+
 ## v1.0.2
 
 * Fixed issue with test_credentials and remove_dns_record where name filter was not correct.

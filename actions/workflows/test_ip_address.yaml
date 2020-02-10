@@ -1,0 +1,75 @@
+---
+version: 1.0
+
+description: Test IP Address to verify it is available to use in Men&Mice
+
+input:
+  - connection
+  - server
+  - username
+  - password
+  - port
+  - transport
+  - session
+  - ip_address
+  - range_name
+
+tasks:
+  main:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and (ctx().session == '') }}"
+        do:
+          - login
+      - when: "{{ succeeded() and (ctx().session != '') }}"
+        do:
+          - get_range
+
+  login:
+    action: menandmice.login
+    input:
+      connection: "{{ ctx().connection }}"
+      server: "{{ ctx().server }}"
+      username: "{{ ctx().username }}"
+      password: "{{ ctx().password }}"
+      port: "{{ ctx().port }}"
+      transport: "{{ ctx().transport }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - session: "{{ result().result.session }}"
+        do:
+          - get_range
+
+  get_range:
+    action: menandmice.get_ranges
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      filter: "^{{ ctx().range_name }}$"
+    next:
+      - when: "{{ succeeded() and (result().result.totalResults == 1) }}"
+        publish:
+          - range_ref: "{{ result().result.ranges.range[0].ref }}"
+        do:
+          - get_ip_address
+      - when: "{{ succeeded() and (result().result.totalResults != 1) }}"
+        do:
+          - fail
+
+  get_ip_address:
+    action: menandmice.get_ipam_records
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      filter: "^{{ ctx().ip_address }}$"
+      range_ref: "{{ ctx().range_ref }}"
+    next:
+      - when: "{{ succeeded() and (result().result.totalResults == 1 and result().result.ipamRecords.ipamRecord[0].state.lower() == 'free' and result().result.ipamRecords.ipamRecord[0].claimed == false) }}"
+        do:
+          - noop
+      - when: "{{ succeeded() and (result().result.totalResults != 1 or result().result.ipamRecords.ipamRecord[0].state.lower() == 'assigned' or result().result.ipamRecords.ipamRecord[0].claimed == true) }}"
+        do:
+          - fail
