@@ -1,6 +1,6 @@
 # Change Log
 
-## v1.0.3
+## v1.1.0
 
 * Added test_range action and workflow to test if range has available addresses
 * Added test_ip_address action and workflow to test if a given ip address is available for use

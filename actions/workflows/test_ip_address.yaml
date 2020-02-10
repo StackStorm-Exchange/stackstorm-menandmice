@@ -67,9 +67,20 @@ tasks:
       filter: "^{{ ctx().ip_address }}$"
       range_ref: "{{ ctx().range_ref }}"
     next:
-      - when: "{{ succeeded() and (result().result.totalResults == 1 and result().result.ipamRecords.ipamRecord[0].state.lower() == 'free' and result().result.ipamRecords.ipamRecord[0].claimed == false) }}"
+      - when: "{{ succeeded() }}"
+        publish:
+          - num_results: "{{ result().result.totalResults == 1 }}"
+          - record_state: "{{ result().result.ipamRecords.ipamRecord[0].state.lower() }}"
+          - record_claimed: "{{ result().result.ipamRecords.ipamRecord[0].claimed }}"
+        do:
+          - test_address
+
+  test_address:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and (ctx().num_results == 1 and ctx().record_state == 'free' and ctx().record_claimed == false) }}"
         do:
           - noop
-      - when: "{{ succeeded() and (result().result.totalResults != 1 or result().result.ipamRecords.ipamRecord[0].state.lower() == 'assigned' or result().result.ipamRecords.ipamRecord[0].claimed == true) }}"
+      - when: "{{ succeeded() and (ctx().num_results != 1 or ctx().record_state == 'assigned' or ctx().record_claimed == true) }}"
         do:
           - fail
