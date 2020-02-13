@@ -57,12 +57,9 @@ tasks:
     action: core.noop
     next:
           # We only need an IP address for record if its an A record
-      - when: "{{ succeeded() and (ctx().record_type == 'A' and not ctx().ip_address) }}"
+      - when: "{{ succeeded() and (ctx().record_type == 'A') }}"
         do:
           - get_range
-      - when: "{{ succeeded() and (ctx().record_type == 'A' and ctx().ip_address) }}"
-        do:
-          - get_dns_zone
       - when: "{{ succeeded() and (ctx().record_type != 'A') }}"
         do:
           - get_dns_zone
@@ -78,8 +75,23 @@ tasks:
       - when: "{{ succeeded() }}"
         publish:
           - range_ref: "{{ result().result.ranges.range[0].ref }}"
+          - range_utilization: "{{ result().result.ranges.range[0].utilizationPercentage }}"
+        do:
+          - range_test
+
+  range_test:
+    action: core.noop
+    next:
+        # Verify that there are free addresses in the given range
+      - when: "{{ succeeded() and (ctx().range_utilization < 100 and not ctx().ip_address) }}"
         do:
           - get_next_ip_address
+      - when: "{{ succeeded() and (ctx().range_utilization < 100 and ctx().ip_address) }}"
+        do:
+          - test_ip_address
+      - when: "{{ succeeded() and (ctx().range_utilization == 100) }}"
+        do:
+          - fail
 
   # Get the next available ip address
   get_next_ip_address:
@@ -94,6 +106,20 @@ tasks:
       - when: "{{ succeeded() }}"
         publish:
           - ip_address: "{{ result().result }}"
+        do:
+          - get_dns_zone
+
+  # Verify the IP address is available for use
+  test_ip_address:
+    action: menandmice.test_ip_address
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      range_name: "{{ ctx().range_name }}"
+      ip_address: "{{ ctx().ip_address }}"
+    next:
+      - when: "{{ succeeded() }}"
         do:
           - get_dns_zone
 
@@ -132,3 +158,32 @@ tasks:
       session: "{{ ctx().session }}"
       transport: "{{ ctx().transport }}"
       dns_record: "{{ ctx().dns_record }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - dns_record_ref: "{{ result().result }}"
+        do:
+          - get_dns_servers
+
+  get_dns_servers:
+    action: menandmice.get_dns_servers
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - dns_server_refs: <% result().result.dnsServers.dnsServer.ref.flatten() %>
+        do:
+          - flush_dns_cache
+
+  flush_dns_cache:
+    action: menandmice.flush_from_cache_on_dns_servers
+    input:
+      session: "{{ ctx().session }}"
+      server: "{{ ctx().server }}"
+      transport: "{{ ctx().transport }}"
+      dns_server_refs:
+        ref: "{{ ctx().dns_server_refs }}"
+      entry: "{{ ctx().dns_record_ref }}"
