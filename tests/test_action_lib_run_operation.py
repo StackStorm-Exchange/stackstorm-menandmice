@@ -33,28 +33,6 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         result = action.snake_to_camel(snake)
         self.assertEqual(result, camel)
 
-    def test_get_del_arg_present(self):
-        action = self.get_action_instance({})
-        test_dict = {"key1": "value1",
-                     "key2": "value2"}
-        test_key = "key1"
-        expected_dict = {"key2": "value2"}
-        expected_value = test_dict["key1"]
-        result_value = action.get_del_arg(test_key, test_dict)
-        self.assertEqual(result_value, expected_value)
-        self.assertEqual(test_dict, expected_dict)
-
-    def test_get_del_arg_missing(self):
-        action = self.get_action_instance({})
-        test_dict = {"key1": "value1",
-                     "key2": "value2"}
-        test_key = "key3"
-        expected_dict = test_dict
-        expected_value = None
-        result_value = action.get_del_arg(test_key, test_dict)
-        self.assertEqual(result_value, expected_value)
-        self.assertEqual(test_dict, expected_dict)
-
     def test_resolve_connection_from_config(self):
         action = self.get_action_instance(self.config_good)
         connection_name = 'full'
