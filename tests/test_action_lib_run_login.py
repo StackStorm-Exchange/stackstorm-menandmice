@@ -1,12 +1,12 @@
 from men_and_mice_base_action_test_case import MenAndMiceBaseActionTestCase
 
-from lib.run_login import RunLogin
+from run_login import RunLogin
 from st2common.runners.base_action import Action
 
 from mock import Mock, patch
 
 
-class TestActionLibRunLogin(MenAndMiceBaseActionTestCase):
+class TestActionRunLogin(MenAndMiceBaseActionTestCase):
     __test__ = True
     action_cls = RunLogin
 
@@ -15,7 +15,7 @@ class TestActionLibRunLogin(MenAndMiceBaseActionTestCase):
         self.assertIsInstance(action, RunLogin)
         self.assertIsInstance(action, Action)
 
-    @patch("lib.run_operation.RunOperation._pre_exec")
+    @patch("run_operation.RunOperation._pre_exec")
     def test_run(self, mock__pre_exec):
         action = self.get_action_instance(self.config_blank)
         connection = {'connection': None,

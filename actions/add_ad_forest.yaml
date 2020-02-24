@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddADForest (http://api.menandmice.com/8.1.0/#AddADForest)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_ad_forest
 parameters:
   operation:
@@ -45,12 +45,12 @@ parameters:
       'type: ADForest
        reference: http://api.menandmice.com/8.1.0/#ADForest
        json_schema: {
-         "userName": "string", 
-         "catalogServer": "string", 
-         "name": "string", 
-         "readOnly": "boolean", 
-         "password": "string", 
-         "ref": "string"
+         "catalogServer": "string",
+         "name": "string",
+         "password": "string",
+         "readOnly": "boolean",
+         "ref": "string",
+         "userName": "string"
        }'
   save_comment:
     type: string

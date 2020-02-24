@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDNSRecordChangeRequest (http://api.menandmice.com/8.1.0/#AddDNSRecordChangeRequest)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_dns_record_change_request
 parameters:
   operation:
@@ -47,31 +47,31 @@ parameters:
        json_schema: {
          "dnsRecordChange": [
            {
-             "hasAccess": "boolean", 
+             "changeIndex": "unsignedInt",
              "dnsRecordAfter": {
-               "comment": "string", 
-               "aging": "unsignedInt", 
-               "dnsZoneRef": "string", 
-               "name": "string", 
-               "ref": "string", 
-               "enabled": "boolean", 
-               "data": "string", 
-               "ttl": "string", 
+               "aging": "unsignedInt",
+               "comment": "string",
+               "data": "string",
+               "dnsZoneRef": "string",
+               "enabled": "boolean",
+               "name": "string",
+               "ref": "string",
+               "ttl": "string",
                "type": "string"
-             }, 
-             "state": "string", 
+             },
              "dnsRecordBefore": {
-               "comment": "string", 
-               "aging": "unsignedInt", 
-               "dnsZoneRef": "string", 
-               "name": "string", 
-               "ref": "string", 
-               "enabled": "boolean", 
-               "data": "string", 
-               "ttl": "string", 
+               "aging": "unsignedInt",
+               "comment": "string",
+               "data": "string",
+               "dnsZoneRef": "string",
+               "enabled": "boolean",
+               "name": "string",
+               "ref": "string",
+               "ttl": "string",
                "type": "string"
-             }, 
-             "changeIndex": "unsignedInt", 
+             },
+             "hasAccess": "boolean",
+             "state": "string",
              "type": "string"
            }
          ]
@@ -88,7 +88,7 @@ parameters:
        json_schema: {
          "property": [
            {
-             "name": "string", 
+             "name": "string",
              "value": "string"
            }
          ]

@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddADSite (http://api.menandmice.com/8.1.0/#AddADSite)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_ad_site
 parameters:
   operation:
@@ -45,11 +45,11 @@ parameters:
       'type: ADSite
        reference: http://api.menandmice.com/8.1.0/#ADSite
        json_schema: {
-         "adForestRef": "string", 
-         "location": "string", 
-         "ref": "string", 
-         "name": "string", 
-         "description": "string"
+         "adForestRef": "string",
+         "description": "string",
+         "location": "string",
+         "name": "string",
+         "ref": "string"
        }'
   save_comment:
     type: string

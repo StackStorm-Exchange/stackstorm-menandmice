@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command GetFolderForObject (http://api.menandmice.com/8.1.0/#GetFolderForObject)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: get_folder_for_object
 parameters:
   operation:

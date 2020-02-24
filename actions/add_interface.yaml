@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddInterface (http://api.menandmice.com/8.1.0/#AddInterface)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_interface
 parameters:
   operation:
@@ -45,23 +45,23 @@ parameters:
       'type: Interface
        reference: http://api.menandmice.com/8.1.0/#Interface
        json_schema: {
-         "name": "string", 
-         "ref": "string", 
-         "customProperties": {
-           "property": [
-             {
-               "name": "string", 
-               "value": "string"
-             }
-           ]
-         }, 
-         "deviceRef": "string", 
-         "clientIdentifier": "string", 
          "addresses": {
            "address": [
              "string"
            ]
-         }
+         },
+         "clientIdentifier": "string",
+         "customProperties": {
+           "property": [
+             {
+               "name": "string",
+               "value": "string"
+             }
+           ]
+         },
+         "deviceRef": "string",
+         "name": "string",
+         "ref": "string"
        }'
   save_comment:
     type: string

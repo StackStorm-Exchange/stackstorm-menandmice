@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDHCPReservation (http://api.menandmice.com/8.1.0/#AddDHCPReservation)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_dhcp_reservation
 parameters:
   operation:
@@ -45,22 +45,22 @@ parameters:
       'type: DHCPReservation
        reference: http://api.menandmice.com/8.1.0/#DHCPReservation
        json_schema: {
-         "ref": "string", 
-         "name": "string", 
-         "reservationMethod": "string", 
-         "type": "string", 
-         "description": "string", 
-         "filename": "string", 
-         "ownerRef": "string", 
-         "ddnsHostName": "string", 
-         "nextServer": "string", 
-         "clientIdentifier": "string", 
-         "serverName": "string", 
          "addresses": {
            "address": [
              "string"
            ]
-         }
+         },
+         "clientIdentifier": "string",
+         "ddnsHostName": "string",
+         "description": "string",
+         "filename": "string",
+         "name": "string",
+         "nextServer": "string",
+         "ownerRef": "string",
+         "ref": "string",
+         "reservationMethod": "string",
+         "serverName": "string",
+         "type": "string"
        }'
   save_comment:
     type: string

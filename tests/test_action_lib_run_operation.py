@@ -1,7 +1,7 @@
 from men_and_mice_base_action_test_case import MenAndMiceBaseActionTestCase
 
-from lib.run_operation import RunOperation
-from lib.run_operation import CONFIG_CONNECTION_KEYS
+from run_operation import RunOperation
+from run_operation import CONFIG_CONNECTION_KEYS
 from st2common.runners.base_action import Action
 
 import copy
@@ -10,7 +10,7 @@ import zeep
 import logging
 
 
-class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
+class TestActionRunOperation(MenAndMiceBaseActionTestCase):
     __test__ = True
     action_cls = RunOperation
 
@@ -188,7 +188,7 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
                                                      password=connection['password'])
         self.assertEquals(result, expected_session)
 
-    @mock.patch('lib.run_operation.zeep.Client')
+    @mock.patch('run_operation.zeep.Client')
     def test__pre_exec_kwargs(self, mock_client):
         action = self.get_action_instance(self.config_blank)
         kwargs_dict = {'operation': 'GetDNSViews',
@@ -220,8 +220,8 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         self.assertEquals(result_client, mock_client.return_value)
         self.assertEquals(result_context, expected_context)
 
-    @mock.patch('lib.run_operation.zeep.Client')
-    @mock.patch('lib.run_operation.zeep.transports.Transport')
+    @mock.patch('run_operation.zeep.Client')
+    @mock.patch('run_operation.zeep.transports.Transport')
     def test__pre_exec_config(self, mock_transport, mock_client):
         action = self.get_action_instance(self.config_good)
         connection_name = 'full'
@@ -333,9 +333,9 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         result = action._post_exec(obj)
         self.assertEquals(result, expected)
 
-    @mock.patch("lib.run_operation.RunOperation._post_exec")
-    @mock.patch("lib.run_operation.RunOperation._exec")
-    @mock.patch("lib.run_operation.RunOperation._pre_exec")
+    @mock.patch("run_operation.RunOperation._post_exec")
+    @mock.patch("run_operation.RunOperation._exec")
+    @mock.patch("run_operation.RunOperation._pre_exec")
     def test_run(self, mock__pre_exec, mock__exec, mock__post_exec):
         action = self.get_action_instance(self.config_blank)
         kwargs_dict = {'username': 'user',

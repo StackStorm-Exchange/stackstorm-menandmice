@@ -89,7 +89,7 @@ class ActionGenerator(object):
     def load_template_params(self):
         params_yaml_str = self.jinja_render_file(ACTION_TEMPLATE_PATH,
                                                  {'operation_camel_case': ''})
-        params_dict = yaml.load(params_yaml_str)
+        params_dict = yaml.load(params_yaml_str, Loader=yaml.FullLoader)
         params = params_dict['parameters'].keys()
         return params
 
@@ -149,7 +149,7 @@ class ActionGenerator(object):
     def get_type_description(self, type_elem):
         type_dict = self.build_type_dict(type_elem)
         # type_desc = pprint.pformat(type_dict)
-        type_json = json.dumps(type_dict, indent=2)
+        type_json = json.dumps(type_dict, indent=2, sort_keys=True)
         type_json = type_json.replace('\n', '\n       ')
         return (">\n"
                 "      'type: {0}\n"
@@ -161,14 +161,14 @@ class ActionGenerator(object):
     def generate_operation(self, operation):
         op_name = operation.name
         op_inputs = []
-        op_entry_point = "lib/run_operation.py"
+        op_entry_point = "run_operation.py"
 
         if op_name == "Login":
-            op_entry_point = "lib/run_login.py"
+            op_entry_point = "run_login.py"
         elif op_name == "Logout":
-            op_entry_point = "lib/run_logout.py"
+            op_entry_point = "run_logout.py"
         elif op_name == "GetHistory":
-            op_entry_point = "lib/run_get_history.py"
+            op_entry_point = "run_get_history.py"
 
         # Translate operation "inputs" in the SOAP WSDL into StackStorm action
         # parameters

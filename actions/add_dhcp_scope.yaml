@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDHCPScope (http://api.menandmice.com/8.1.0/#AddDHCPScope)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_dhcp_scope
 parameters:
   operation:
@@ -45,14 +45,14 @@ parameters:
       'type: DHCPScope
        reference: http://api.menandmice.com/8.1.0/#DHCPScope
        json_schema: {
-         "available": "unsignedInt", 
-         "superscope": "string", 
-         "name": "string", 
-         "dhcpServerRef": "string", 
-         "enabled": "boolean", 
-         "rangeRef": "string", 
-         "ref": "string", 
-         "description": "string"
+         "available": "unsignedInt",
+         "description": "string",
+         "dhcpServerRef": "string",
+         "enabled": "boolean",
+         "name": "string",
+         "rangeRef": "string",
+         "ref": "string",
+         "superscope": "string"
        }'
   save_comment:
     type: string

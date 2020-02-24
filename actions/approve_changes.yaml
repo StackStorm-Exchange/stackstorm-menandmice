@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command ApproveChanges (http://api.menandmice.com/8.1.0/#ApproveChanges)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: approve_changes
 parameters:
   operation:
@@ -50,65 +50,65 @@ parameters:
        json_schema: {
          "dnsZoneChange": [
            {
+             "changeIndex": "unsignedInt",
              "dnsZoneAfter": {
-               "dnssecSigned": "boolean", 
-               "name": "string", 
-               "dnsScopeName": "string", 
-               "adIntegrated": "boolean", 
-               "type": "string", 
-               "adReplicationType": "string", 
-               "dnsViewRef": "string", 
-               "dynamic": "boolean", 
-               "authority": "string", 
-               "kskIDs": "string", 
-               "adPartition": "string", 
-               "zskIDs": "string", 
+               "adIntegrated": "boolean",
+               "adPartition": "string",
+               "adReplicationType": "string",
+               "authority": "string",
                "customProperties": {
                  "property": [
                    {
-                     "name": "string", 
+                     "name": "string",
                      "value": "string"
                    }
                  ]
-               }, 
+               },
+               "dnsScopeName": "string",
+               "dnsViewRef": "string",
                "dnsViewRefs": {
                  "ref": [
                    "string"
                  ]
-               }, 
-               "ref": "string"
-             }, 
-             "hasAccess": "boolean", 
+               },
+               "dnssecSigned": "boolean",
+               "dynamic": "boolean",
+               "kskIDs": "string",
+               "name": "string",
+               "ref": "string",
+               "type": "string",
+               "zskIDs": "string"
+             },
              "dnsZoneBefore": {
-               "dnssecSigned": "boolean", 
-               "name": "string", 
-               "dnsScopeName": "string", 
-               "adIntegrated": "boolean", 
-               "type": "string", 
-               "adReplicationType": "string", 
-               "dnsViewRef": "string", 
-               "dynamic": "boolean", 
-               "authority": "string", 
-               "kskIDs": "string", 
-               "adPartition": "string", 
-               "zskIDs": "string", 
+               "adIntegrated": "boolean",
+               "adPartition": "string",
+               "adReplicationType": "string",
+               "authority": "string",
                "customProperties": {
                  "property": [
                    {
-                     "name": "string", 
+                     "name": "string",
                      "value": "string"
                    }
                  ]
-               }, 
+               },
+               "dnsScopeName": "string",
+               "dnsViewRef": "string",
                "dnsViewRefs": {
                  "ref": [
                    "string"
                  ]
-               }, 
-               "ref": "string"
-             }, 
-             "state": "string", 
-             "changeIndex": "unsignedInt", 
+               },
+               "dnssecSigned": "boolean",
+               "dynamic": "boolean",
+               "kskIDs": "string",
+               "name": "string",
+               "ref": "string",
+               "type": "string",
+               "zskIDs": "string"
+             },
+             "hasAccess": "boolean",
+             "state": "string",
              "type": "string"
            }
          ]
@@ -122,31 +122,31 @@ parameters:
        json_schema: {
          "dnsRecordChange": [
            {
-             "hasAccess": "boolean", 
+             "changeIndex": "unsignedInt",
              "dnsRecordAfter": {
-               "comment": "string", 
-               "aging": "unsignedInt", 
-               "dnsZoneRef": "string", 
-               "name": "string", 
-               "ref": "string", 
-               "enabled": "boolean", 
-               "data": "string", 
-               "ttl": "string", 
+               "aging": "unsignedInt",
+               "comment": "string",
+               "data": "string",
+               "dnsZoneRef": "string",
+               "enabled": "boolean",
+               "name": "string",
+               "ref": "string",
+               "ttl": "string",
                "type": "string"
-             }, 
-             "state": "string", 
+             },
              "dnsRecordBefore": {
-               "comment": "string", 
-               "aging": "unsignedInt", 
-               "dnsZoneRef": "string", 
-               "name": "string", 
-               "ref": "string", 
-               "enabled": "boolean", 
-               "data": "string", 
-               "ttl": "string", 
+               "aging": "unsignedInt",
+               "comment": "string",
+               "data": "string",
+               "dnsZoneRef": "string",
+               "enabled": "boolean",
+               "name": "string",
+               "ref": "string",
+               "ttl": "string",
                "type": "string"
-             }, 
-             "changeIndex": "unsignedInt", 
+             },
+             "hasAccess": "boolean",
+             "state": "string",
              "type": "string"
            }
          ]
@@ -160,30 +160,30 @@ parameters:
        json_schema: {
          "dhcpScopeChange": [
            {
-             "dhcpScopeBefore": {
-               "available": "unsignedInt", 
-               "superscope": "string", 
-               "name": "string", 
-               "dhcpServerRef": "string", 
-               "enabled": "boolean", 
-               "rangeRef": "string", 
-               "ref": "string", 
-               "description": "string"
-             }, 
-             "hasAccess": "boolean", 
-             "state": "string", 
-             "changeIndex": "unsignedInt", 
-             "type": "string", 
+             "changeIndex": "unsignedInt",
              "dhcpScopeAfter": {
-               "available": "unsignedInt", 
-               "superscope": "string", 
-               "name": "string", 
-               "dhcpServerRef": "string", 
-               "enabled": "boolean", 
-               "rangeRef": "string", 
-               "ref": "string", 
-               "description": "string"
-             }
+               "available": "unsignedInt",
+               "description": "string",
+               "dhcpServerRef": "string",
+               "enabled": "boolean",
+               "name": "string",
+               "rangeRef": "string",
+               "ref": "string",
+               "superscope": "string"
+             },
+             "dhcpScopeBefore": {
+               "available": "unsignedInt",
+               "description": "string",
+               "dhcpServerRef": "string",
+               "enabled": "boolean",
+               "name": "string",
+               "rangeRef": "string",
+               "ref": "string",
+               "superscope": "string"
+             },
+             "hasAccess": "boolean",
+             "state": "string",
+             "type": "string"
            }
          ]
        }'
@@ -196,45 +196,45 @@ parameters:
        json_schema: {
          "dhcpReservationChange": [
            {
-             "hasAccess": "boolean", 
-             "dhcpReservationBefore": {
-               "ref": "string", 
-               "name": "string", 
-               "reservationMethod": "string", 
-               "type": "string", 
-               "description": "string", 
-               "filename": "string", 
-               "ownerRef": "string", 
-               "ddnsHostName": "string", 
-               "nextServer": "string", 
-               "clientIdentifier": "string", 
-               "serverName": "string", 
-               "addresses": {
-                 "address": [
-                   "string"
-                 ]
-               }
-             }, 
-             "state": "string", 
-             "changeIndex": "unsignedInt", 
+             "changeIndex": "unsignedInt",
              "dhcpReservationAfter": {
-               "ref": "string", 
-               "name": "string", 
-               "reservationMethod": "string", 
-               "type": "string", 
-               "description": "string", 
-               "filename": "string", 
-               "ownerRef": "string", 
-               "ddnsHostName": "string", 
-               "nextServer": "string", 
-               "clientIdentifier": "string", 
-               "serverName": "string", 
                "addresses": {
                  "address": [
                    "string"
                  ]
-               }
-             }, 
+               },
+               "clientIdentifier": "string",
+               "ddnsHostName": "string",
+               "description": "string",
+               "filename": "string",
+               "name": "string",
+               "nextServer": "string",
+               "ownerRef": "string",
+               "ref": "string",
+               "reservationMethod": "string",
+               "serverName": "string",
+               "type": "string"
+             },
+             "dhcpReservationBefore": {
+               "addresses": {
+                 "address": [
+                   "string"
+                 ]
+               },
+               "clientIdentifier": "string",
+               "ddnsHostName": "string",
+               "description": "string",
+               "filename": "string",
+               "name": "string",
+               "nextServer": "string",
+               "ownerRef": "string",
+               "ref": "string",
+               "reservationMethod": "string",
+               "serverName": "string",
+               "type": "string"
+             },
+             "hasAccess": "boolean",
+             "state": "string",
              "type": "string"
            }
          ]
@@ -248,23 +248,23 @@ parameters:
        json_schema: {
          "dhcpExclusionChange": [
            {
-             "hasAccess": "boolean", 
+             "changeIndex": "unsignedInt",
              "dhcpExclusionAfter": {
-               "from": "string", 
-               "dhcpScopeRef": "string", 
-               "ref": "string", 
-               "name": "string", 
+               "dhcpScopeRef": "string",
+               "from": "string",
+               "name": "string",
+               "ref": "string",
                "to": "string"
-             }, 
-             "state": "string", 
+             },
              "dhcpExclusionBefore": {
-               "from": "string", 
-               "dhcpScopeRef": "string", 
-               "ref": "string", 
-               "name": "string", 
+               "dhcpScopeRef": "string",
+               "from": "string",
+               "name": "string",
+               "ref": "string",
                "to": "string"
-             }, 
-             "changeIndex": "unsignedInt", 
+             },
+             "hasAccess": "boolean",
+             "state": "string",
              "type": "string"
            }
          ]
@@ -278,28 +278,28 @@ parameters:
        json_schema: {
          "dhcpAddressPoolChange": [
            {
-             "dhcpAddressPoolBefore": {
-               "from": "string", 
-               "name": "string", 
-               "failoverPeer": "string", 
-               "to": "string", 
-               "failoverRelationship": "string", 
-               "dhcpScopeRef": "string", 
-               "ref": "string"
-             }, 
-             "hasAccess": "boolean", 
-             "state": "string", 
-             "changeIndex": "unsignedInt", 
-             "type": "string", 
+             "changeIndex": "unsignedInt",
              "dhcpAddressPoolAfter": {
-               "from": "string", 
-               "name": "string", 
-               "failoverPeer": "string", 
-               "to": "string", 
-               "failoverRelationship": "string", 
-               "dhcpScopeRef": "string", 
-               "ref": "string"
-             }
+               "dhcpScopeRef": "string",
+               "failoverPeer": "string",
+               "failoverRelationship": "string",
+               "from": "string",
+               "name": "string",
+               "ref": "string",
+               "to": "string"
+             },
+             "dhcpAddressPoolBefore": {
+               "dhcpScopeRef": "string",
+               "failoverPeer": "string",
+               "failoverRelationship": "string",
+               "from": "string",
+               "name": "string",
+               "ref": "string",
+               "to": "string"
+             },
+             "hasAccess": "boolean",
+             "state": "string",
+             "type": "string"
            }
          ]
        }'
@@ -312,19 +312,19 @@ parameters:
        json_schema: {
          "dhcpOptionChange": [
            {
-             "policyName": "string", 
-             "hasAccess": "boolean", 
+             "changeIndex": "unsignedInt",
              "dhcpOption": {
-               "option": "string", 
+               "option": "string",
                "value": "string"
-             }, 
-             "state": "string", 
-             "changeIndex": "unsignedInt", 
+             },
+             "hasAccess": "boolean",
              "owner": {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
-             }
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
+             },
+             "policyName": "string",
+             "state": "string"
            }
          ]
        }'
@@ -337,27 +337,27 @@ parameters:
        json_schema: {
          "customPropertyChange": [
            {
-             "hasAccess": "boolean", 
-             "customPropertiesBefore": {
-               "property": [
-                 {
-                   "name": "string", 
-                   "value": "string"
-                 }
-               ]
-             }, 
-             "state": "string", 
-             "type": "string", 
-             "objType": "string", 
-             "ref": "string", 
              "customPropertiesAfter": {
                "property": [
                  {
-                   "name": "string", 
+                   "name": "string",
                    "value": "string"
                  }
                ]
-             }
+             },
+             "customPropertiesBefore": {
+               "property": [
+                 {
+                   "name": "string",
+                   "value": "string"
+                 }
+               ]
+             },
+             "hasAccess": "boolean",
+             "objType": "string",
+             "ref": "string",
+             "state": "string",
+             "type": "string"
            }
          ]
        }'

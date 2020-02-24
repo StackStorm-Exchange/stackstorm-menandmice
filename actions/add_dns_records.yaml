@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDNSRecords (http://api.menandmice.com/8.1.0/#AddDNSRecords)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_dns_records
 parameters:
   operation:
@@ -47,14 +47,14 @@ parameters:
        json_schema: {
          "dnsRecord": [
            {
-             "comment": "string", 
-             "aging": "unsignedInt", 
-             "dnsZoneRef": "string", 
-             "name": "string", 
-             "ref": "string", 
-             "enabled": "boolean", 
-             "data": "string", 
-             "ttl": "string", 
+             "aging": "unsignedInt",
+             "comment": "string",
+             "data": "string",
+             "dnsZoneRef": "string",
+             "enabled": "boolean",
+             "name": "string",
+             "ref": "string",
+             "ttl": "string",
              "type": "string"
            }
          ]

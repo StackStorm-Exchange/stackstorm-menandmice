@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command RemoveDHCPFailoverRelationships (http://api.menandmice.com/8.1.0/#RemoveDHCPFailoverRelationships)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: remove_dhcp_failover_relationships
 parameters:
   operation:
@@ -47,7 +47,7 @@ parameters:
        json_schema: {
          "dhcpRefAndFailoverRelationshipName": [
            {
-             "dhcpFailoverRelationshipName": "string", 
+             "dhcpFailoverRelationshipName": "string",
              "dhcpServerRef": "string"
            }
          ]

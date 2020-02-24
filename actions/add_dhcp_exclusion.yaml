@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDHCPExclusion (http://api.menandmice.com/8.1.0/#AddDHCPExclusion)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_dhcp_exclusion
 parameters:
   operation:
@@ -45,10 +45,10 @@ parameters:
       'type: DHCPExclusion
        reference: http://api.menandmice.com/8.1.0/#DHCPExclusion
        json_schema: {
-         "from": "string", 
-         "dhcpScopeRef": "string", 
-         "ref": "string", 
-         "name": "string", 
+         "dhcpScopeRef": "string",
+         "from": "string",
+         "name": "string",
+         "ref": "string",
          "to": "string"
        }'
   save_comment:

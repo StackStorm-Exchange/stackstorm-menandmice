@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDHCPServer (http://api.menandmice.com/8.1.0/#AddDHCPServer)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_dhcp_server
 parameters:
   operation:
@@ -45,26 +45,26 @@ parameters:
       'type: DHCPServer
        reference: http://api.menandmice.com/8.1.0/#DHCPServer
        json_schema: {
-         "username": "string", 
-         "type": "string", 
-         "name": "string", 
-         "resolvedAddress": "string", 
-         "enablePassword": "string", 
-         "enabled": "boolean", 
-         "state": "string", 
-         "proxy": "string", 
+         "address": "string",
          "customProperties": {
            "property": [
              {
-               "name": "string", 
+               "name": "string",
                "value": "string"
              }
            ]
-         }, 
-         "address": "string", 
-         "security": "string", 
-         "password": "string", 
-         "ref": "string"
+         },
+         "enablePassword": "string",
+         "enabled": "boolean",
+         "name": "string",
+         "password": "string",
+         "proxy": "string",
+         "ref": "string",
+         "resolvedAddress": "string",
+         "security": "string",
+         "state": "string",
+         "type": "string",
+         "username": "string"
        }'
   save_comment:
     type: string

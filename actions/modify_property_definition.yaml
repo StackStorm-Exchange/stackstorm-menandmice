@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command ModifyPropertyDefinition (http://api.menandmice.com/8.1.0/#ModifyPropertyDefinition)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: modify_property_definition
 parameters:
   operation:
@@ -51,19 +51,19 @@ parameters:
       'type: PropertyDefinition
        reference: http://api.menandmice.com/8.1.0/#PropertyDefinition
        json_schema: {
-         "mandatory": "boolean", 
-         "name": "string", 
-         "defaultValue": "string", 
-         "system": "boolean", 
+         "defaultValue": "string",
          "listItems": {
            "string": [
              "string"
            ]
-         }, 
-         "readOnly": "boolean", 
-         "multiLine": "boolean", 
-         "type": "string", 
-         "parentProperty": "string"
+         },
+         "mandatory": "boolean",
+         "multiLine": "boolean",
+         "name": "string",
+         "parentProperty": "string",
+         "readOnly": "boolean",
+         "system": "boolean",
+         "type": "string"
        }'
   update_existing:
     type: boolean

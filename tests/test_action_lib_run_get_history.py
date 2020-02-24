@@ -1,6 +1,6 @@
 from men_and_mice_base_action_test_case import MenAndMiceBaseActionTestCase
 
-from lib.run_get_history import RunGetHistory
+from run_get_history import RunGetHistory
 from st2common.runners.base_action import Action
 
 from mock import Mock, patch
@@ -8,7 +8,7 @@ from mock import Mock, patch
 import copy
 
 
-class TestActionLibRunGetHistory(MenAndMiceBaseActionTestCase):
+class TestActionRunGetHistory(MenAndMiceBaseActionTestCase):
     __test__ = True
     action_cls = RunGetHistory
 
@@ -17,7 +17,7 @@ class TestActionLibRunGetHistory(MenAndMiceBaseActionTestCase):
         self.assertIsInstance(action, RunGetHistory)
         self.assertIsInstance(action, Action)
 
-    @patch("lib.run_operation.RunOperation._pre_exec")
+    @patch("run_operation.RunOperation._pre_exec")
     def test__pre_exec(self, mock__pre_exec):
         action = self.get_action_instance(self.config_blank)
         history_user = 'test_user'

@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDNSServer (http://api.menandmice.com/8.1.0/#AddDNSServer)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_dns_server
 parameters:
   operation:
@@ -45,25 +45,25 @@ parameters:
       'type: DNSServer
        reference: http://api.menandmice.com/8.1.0/#DNSServer
        json_schema: {
-         "name": "string", 
-         "resolvedAddress": "string", 
-         "type": "string", 
-         "enabled": "boolean", 
-         "subtype": "string", 
-         "state": "string", 
-         "proxy": "string", 
+         "adForest": "string",
+         "address": "string",
          "customProperties": {
            "property": [
              {
-               "name": "string", 
+               "name": "string",
                "value": "string"
              }
            ]
-         }, 
-         "address": "string", 
-         "adForest": "string", 
-         "ref": "string", 
-         "port": "unsignedInt"
+         },
+         "enabled": "boolean",
+         "name": "string",
+         "port": "unsignedInt",
+         "proxy": "string",
+         "ref": "string",
+         "resolvedAddress": "string",
+         "state": "string",
+         "subtype": "string",
+         "type": "string"
        }'
   save_comment:
     type: string

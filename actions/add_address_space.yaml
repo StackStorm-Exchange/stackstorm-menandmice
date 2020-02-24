@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddAddressSpace (http://api.menandmice.com/8.1.0/#AddAddressSpace)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_address_space
 parameters:
   operation:
@@ -45,9 +45,9 @@ parameters:
       'type: AddressSpace
        reference: http://api.menandmice.com/8.1.0/#AddressSpace
        json_schema: {
-         "ref": "string", 
-         "name": "string", 
-         "description": "string"
+         "description": "string",
+         "name": "string",
+         "ref": "string"
        }'
   save_comment:
     type: string

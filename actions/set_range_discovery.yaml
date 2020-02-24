@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command SetRangeDiscovery (http://api.menandmice.com/8.1.0/#SetRangeDiscovery)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: set_range_discovery
 parameters:
   operation:
@@ -48,9 +48,9 @@ parameters:
       'type: Discovery
        reference: http://api.menandmice.com/8.1.0/#Discovery
        json_schema: {
-         "interval": "unsignedInt", 
-         "enabled": "boolean", 
-         "startTime": "string", 
+         "enabled": "boolean",
+         "interval": "unsignedInt",
+         "startTime": "string",
          "unit": "string"
        }'
   save_comment:

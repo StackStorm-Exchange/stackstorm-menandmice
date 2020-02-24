@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDevice (http://api.menandmice.com/8.1.0/#AddDevice)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_device
 parameters:
   operation:
@@ -45,39 +45,39 @@ parameters:
       'type: Device
        reference: http://api.menandmice.com/8.1.0/#Device
        json_schema: {
+         "customProperties": {
+           "property": [
+             {
+               "name": "string",
+               "value": "string"
+             }
+           ]
+         },
          "interfaces": {
            "interface": [
              {
-               "name": "string", 
-               "ref": "string", 
-               "customProperties": {
-                 "property": [
-                   {
-                     "name": "string", 
-                     "value": "string"
-                   }
-                 ]
-               }, 
-               "deviceRef": "string", 
-               "clientIdentifier": "string", 
                "addresses": {
                  "address": [
                    "string"
                  ]
-               }
+               },
+               "clientIdentifier": "string",
+               "customProperties": {
+                 "property": [
+                   {
+                     "name": "string",
+                     "value": "string"
+                   }
+                 ]
+               },
+               "deviceRef": "string",
+               "name": "string",
+               "ref": "string"
              }
            ]
-         }, 
-         "ref": "string", 
-         "name": "string", 
-         "customProperties": {
-           "property": [
-             {
-               "name": "string", 
-               "value": "string"
-             }
-           ]
-         }
+         },
+         "name": "string",
+         "ref": "string"
        }'
   save_comment:
     type: string

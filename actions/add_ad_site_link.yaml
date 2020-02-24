@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddADSiteLink (http://api.menandmice.com/8.1.0/#AddADSiteLink)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_ad_site_link
 parameters:
   operation:
@@ -45,17 +45,17 @@ parameters:
       'type: ADSiteLink
        reference: http://api.menandmice.com/8.1.0/#ADSiteLink
        json_schema: {
-         "adForestRef": "string", 
-         "name": "string", 
-         "cost": "unsignedInt", 
-         "replInterval": "unsignedInt", 
+         "adForestRef": "string",
+         "cost": "unsignedInt",
+         "description": "string",
+         "name": "string",
+         "ref": "string",
+         "replInterval": "unsignedInt",
          "siteList": {
            "string": [
              "string"
            ]
-         }, 
-         "ref": "string", 
-         "description": "string"
+         }
        }'
   save_comment:
     type: string

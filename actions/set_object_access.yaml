@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command SetObjectAccess (http://api.menandmice.com/8.1.0/#SetObjectAccess)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: set_object_access
 parameters:
   operation:
@@ -47,16 +47,16 @@ parameters:
        json_schema: {
          "identityAccess": [
            {
-             "identityRef": "string", 
              "accessEntries": {
                "accessEntry": [
                  {
-                   "access": "string", 
+                   "access": "string",
                    "name": "string"
                  }
                ]
-             }, 
-             "identityName": "string"
+             },
+             "identityName": "string",
+             "identityRef": "string"
            }
          ]
        }'

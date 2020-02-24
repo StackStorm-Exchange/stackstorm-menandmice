@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command ReportIPFromClientIdentifier (http://api.menandmice.com/8.1.0/#ReportIPFromClientIdentifier)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: report_ip_from_client_identifier
 parameters:
   operation:

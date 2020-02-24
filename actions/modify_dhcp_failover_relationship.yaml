@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command ModifyDHCPFailoverRelationship (http://api.menandmice.com/8.1.0/#ModifyDHCPFailoverRelationship)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: modify_dhcp_failover_relationship
 parameters:
   operation:
@@ -45,20 +45,20 @@ parameters:
       'type: DHCPFailoverRelationship
        reference: http://api.menandmice.com/8.1.0/#DHCPFailoverRelationship
        json_schema: {
-         "failoverServerType": "string", 
-         "failoverMode": "string", 
-         "name": "string", 
-         "dhcpServerRef": "string", 
-         "primaryServer": "string", 
-         "mclt": "unsignedInt", 
-         "safePeriod": "unsignedInt", 
-         "secondaryServer": "string", 
-         "percentage": "unsignedInt", 
          "dhcpScopeRefs": {
            "ref": [
              "string"
            ]
-         }, 
+         },
+         "dhcpServerRef": "string",
+         "failoverMode": "string",
+         "failoverServerType": "string",
+         "mclt": "unsignedInt",
+         "name": "string",
+         "percentage": "unsignedInt",
+         "primaryServer": "string",
+         "safePeriod": "unsignedInt",
+         "secondaryServer": "string",
          "sharedSecret": "string"
        }'
   save_comment:

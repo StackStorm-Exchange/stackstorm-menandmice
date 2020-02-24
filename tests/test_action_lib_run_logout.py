@@ -1,12 +1,12 @@
 from men_and_mice_base_action_test_case import MenAndMiceBaseActionTestCase
 
-from lib.run_logout import RunLogout
+from run_logout import RunLogout
 from st2common.runners.base_action import Action
 
 from mock import Mock, patch
 
 
-class TestActionLibRunLogout(MenAndMiceBaseActionTestCase):
+class TestActionRunLogout(MenAndMiceBaseActionTestCase):
     __test__ = True
     action_cls = RunLogout
 
@@ -15,7 +15,7 @@ class TestActionLibRunLogout(MenAndMiceBaseActionTestCase):
         self.assertIsInstance(action, RunLogout)
         self.assertIsInstance(action, Action)
 
-    @patch("lib.run_operation.RunOperation._pre_exec")
+    @patch("run_operation.RunOperation._pre_exec")
     def test_run(self, mock__pre_exec):
         action = self.get_action_instance(self.config_blank)
         expected_session = "xyz123"

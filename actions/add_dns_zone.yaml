@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDNSZone (http://api.menandmice.com/8.1.0/#AddDNSZone)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: add_dns_zone
 parameters:
   operation:
@@ -45,32 +45,32 @@ parameters:
       'type: DNSZone
        reference: http://api.menandmice.com/8.1.0/#DNSZone
        json_schema: {
-         "dnssecSigned": "boolean", 
-         "name": "string", 
-         "dnsScopeName": "string", 
-         "adIntegrated": "boolean", 
-         "type": "string", 
-         "adReplicationType": "string", 
-         "dnsViewRef": "string", 
-         "dynamic": "boolean", 
-         "authority": "string", 
-         "kskIDs": "string", 
-         "adPartition": "string", 
-         "zskIDs": "string", 
+         "adIntegrated": "boolean",
+         "adPartition": "string",
+         "adReplicationType": "string",
+         "authority": "string",
          "customProperties": {
            "property": [
              {
-               "name": "string", 
+               "name": "string",
                "value": "string"
              }
            ]
-         }, 
+         },
+         "dnsScopeName": "string",
+         "dnsViewRef": "string",
          "dnsViewRefs": {
            "ref": [
              "string"
            ]
-         }, 
-         "ref": "string"
+         },
+         "dnssecSigned": "boolean",
+         "dynamic": "boolean",
+         "kskIDs": "string",
+         "name": "string",
+         "ref": "string",
+         "type": "string",
+         "zskIDs": "string"
        }'
   masters:
     type: object

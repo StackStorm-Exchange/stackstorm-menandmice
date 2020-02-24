@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command SetProperties (http://api.menandmice.com/8.1.0/#SetProperties)"
 enabled: true
 runner_type: "python-script"
-entry_point: lib/run_operation.py
+entry_point: run_operation.py
 name: set_properties
 parameters:
   operation:
@@ -59,7 +59,7 @@ parameters:
        json_schema: {
          "property": [
            {
-             "name": "string", 
+             "name": "string",
              "value": "string"
            }
          ]
