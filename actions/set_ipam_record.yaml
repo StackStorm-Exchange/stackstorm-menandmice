@@ -45,95 +45,95 @@ parameters:
       'type: IPAMRecord
        reference: http://api.menandmice.com/8.1.0/#IPAMRecord
        json_schema: {
+         "addrRef": "string",
+         "address": "string",
+         "claimed": "boolean",
+         "customProperties": {
+           "property": [
+             {
+               "name": "string",
+               "value": "string"
+             }
+           ]
+         },
+         "device": "string",
+         "dhcpLeases": {
+           "dhcpLease": [
+             {
+               "address": "string",
+               "dhcpScopeRef": "string",
+               "lease": "string",
+               "mac": "string",
+               "name": "string",
+               "state": "string",
+               "type": "string"
+             }
+           ]
+         },
+         "dhcpReservations": {
+           "dhcpReservation": [
+             {
+               "addresses": {
+                 "address": [
+                   "string"
+                 ]
+               },
+               "clientIdentifier": "string",
+               "ddnsHostName": "string",
+               "description": "string",
+               "filename": "string",
+               "name": "string",
+               "nextServer": "string",
+               "ownerRef": "string",
+               "ref": "string",
+               "reservationMethod": "string",
+               "serverName": "string",
+               "type": "string"
+             }
+           ]
+         },
+         "discoveryType": "string",
          "dnsHosts": {
            "dnsHost": [
              {
                "dnsRecord": {
-                 "comment": "string", 
-                 "aging": "unsignedInt", 
-                 "dnsZoneRef": "string", 
-                 "name": "string", 
-                 "ref": "string", 
-                 "enabled": "boolean", 
-                 "data": "string", 
-                 "ttl": "string", 
+                 "aging": "unsignedInt",
+                 "comment": "string",
+                 "data": "string",
+                 "dnsZoneRef": "string",
+                 "enabled": "boolean",
+                 "name": "string",
+                 "ref": "string",
+                 "ttl": "string",
                  "type": "string"
-               }, 
-               "ptrStatus": "string", 
+               },
+               "ptrStatus": "string",
                "relatedRecords": {
                  "dnsRecord": [
                    {
-                     "comment": "string", 
-                     "aging": "unsignedInt", 
-                     "dnsZoneRef": "string", 
-                     "name": "string", 
-                     "ref": "string", 
-                     "enabled": "boolean", 
-                     "data": "string", 
-                     "ttl": "string", 
+                     "aging": "unsignedInt",
+                     "comment": "string",
+                     "data": "string",
+                     "dnsZoneRef": "string",
+                     "enabled": "boolean",
+                     "name": "string",
+                     "ref": "string",
+                     "ttl": "string",
                      "type": "string"
                    }
                  ]
                }
              }
            ]
-         }, 
-         "addrRef": "string", 
-         "usage": "unsignedInt", 
-         "discoveryType": "string", 
-         "dhcpReservations": {
-           "dhcpReservation": [
-             {
-               "ref": "string", 
-               "name": "string", 
-               "reservationMethod": "string", 
-               "type": "string", 
-               "description": "string", 
-               "filename": "string", 
-               "ownerRef": "string", 
-               "ddnsHostName": "string", 
-               "nextServer": "string", 
-               "clientIdentifier": "string", 
-               "serverName": "string", 
-               "addresses": {
-                 "address": [
-                   "string"
-                 ]
-               }
-             }
-           ]
-         }, 
-         "dhcpLeases": {
-           "dhcpLease": [
-             {
-               "name": "string", 
-               "mac": "string", 
-               "state": "string", 
-               "address": "string", 
-               "dhcpScopeRef": "string", 
-               "type": "string", 
-               "lease": "string"
-             }
-           ]
-         }, 
-         "lastKnownClientIdentifier": "string", 
-         "device": "string", 
-         "state": "string", 
-         "lastDiscoveryDate": "string", 
-         "ptrStatus": "string", 
-         "customProperties": {
-           "property": [
-             {
-               "name": "string", 
-               "value": "string"
-             }
-           ]
-         }, 
-         "address": "string", 
-         "claimed": "boolean", 
-         "interface": "string", 
-         "lastSeenDate": "string", 
-         "extraneousPTR": "boolean"
+         },
+         "extraneousPTR": "boolean",
+         "interface": "string",
+         "lastDiscoveryDate": "string",
+         "lastKnownClientIdentifier": "string",
+         "lastSeenDate": "string",
+         "ptrStatus": "string",
+         "state": "string",
+         "usage": "unsignedInt"
        }'
   ipam_record_after:
     type: object
@@ -142,95 +142,95 @@ parameters:
       'type: IPAMRecord
        reference: http://api.menandmice.com/8.1.0/#IPAMRecord
        json_schema: {
+         "addrRef": "string",
+         "address": "string",
+         "claimed": "boolean",
+         "customProperties": {
+           "property": [
+             {
+               "name": "string",
+               "value": "string"
+             }
+           ]
+         },
+         "device": "string",
+         "dhcpLeases": {
+           "dhcpLease": [
+             {
+               "address": "string",
+               "dhcpScopeRef": "string",
+               "lease": "string",
+               "mac": "string",
+               "name": "string",
+               "state": "string",
+               "type": "string"
+             }
+           ]
+         },
+         "dhcpReservations": {
+           "dhcpReservation": [
+             {
+               "addresses": {
+                 "address": [
+                   "string"
+                 ]
+               },
+               "clientIdentifier": "string",
+               "ddnsHostName": "string",
+               "description": "string",
+               "filename": "string",
+               "name": "string",
+               "nextServer": "string",
+               "ownerRef": "string",
+               "ref": "string",
+               "reservationMethod": "string",
+               "serverName": "string",
+               "type": "string"
+             }
+           ]
+         },
+         "discoveryType": "string",
          "dnsHosts": {
            "dnsHost": [
              {
                "dnsRecord": {
-                 "comment": "string", 
-                 "aging": "unsignedInt", 
-                 "dnsZoneRef": "string", 
-                 "name": "string", 
-                 "ref": "string", 
-                 "enabled": "boolean", 
-                 "data": "string", 
-                 "ttl": "string", 
+                 "aging": "unsignedInt",
+                 "comment": "string",
+                 "data": "string",
+                 "dnsZoneRef": "string",
+                 "enabled": "boolean",
+                 "name": "string",
+                 "ref": "string",
+                 "ttl": "string",
                  "type": "string"
-               }, 
-               "ptrStatus": "string", 
+               },
+               "ptrStatus": "string",
                "relatedRecords": {
                  "dnsRecord": [
                    {
-                     "comment": "string", 
-                     "aging": "unsignedInt", 
-                     "dnsZoneRef": "string", 
-                     "name": "string", 
-                     "ref": "string", 
-                     "enabled": "boolean", 
-                     "data": "string", 
-                     "ttl": "string", 
+                     "aging": "unsignedInt",
+                     "comment": "string",
+                     "data": "string",
+                     "dnsZoneRef": "string",
+                     "enabled": "boolean",
+                     "name": "string",
+                     "ref": "string",
+                     "ttl": "string",
                      "type": "string"
                    }
                  ]
                }
              }
            ]
-         }, 
-         "addrRef": "string", 
-         "usage": "unsignedInt", 
-         "discoveryType": "string", 
-         "dhcpReservations": {
-           "dhcpReservation": [
-             {
-               "ref": "string", 
-               "name": "string", 
-               "reservationMethod": "string", 
-               "type": "string", 
-               "description": "string", 
-               "filename": "string", 
-               "ownerRef": "string", 
-               "ddnsHostName": "string", 
-               "nextServer": "string", 
-               "clientIdentifier": "string", 
-               "serverName": "string", 
-               "addresses": {
-                 "address": [
-                   "string"
-                 ]
-               }
-             }
-           ]
-         }, 
-         "dhcpLeases": {
-           "dhcpLease": [
-             {
-               "name": "string", 
-               "mac": "string", 
-               "state": "string", 
-               "address": "string", 
-               "dhcpScopeRef": "string", 
-               "type": "string", 
-               "lease": "string"
-             }
-           ]
-         }, 
-         "lastKnownClientIdentifier": "string", 
-         "device": "string", 
-         "state": "string", 
-         "lastDiscoveryDate": "string", 
-         "ptrStatus": "string", 
-         "customProperties": {
-           "property": [
-             {
-               "name": "string", 
-               "value": "string"
-             }
-           ]
-         }, 
-         "address": "string", 
-         "claimed": "boolean", 
-         "interface": "string", 
-         "lastSeenDate": "string", 
-         "extraneousPTR": "boolean"
+         },
+         "extraneousPTR": "boolean",
+         "interface": "string",
+         "lastDiscoveryDate": "string",
+         "lastKnownClientIdentifier": "string",
+         "lastSeenDate": "string",
+         "ptrStatus": "string",
+         "state": "string",
+         "usage": "unsignedInt"
        }'
   save_comment:
     type: string

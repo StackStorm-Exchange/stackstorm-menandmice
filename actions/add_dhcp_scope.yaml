@@ -45,14 +45,14 @@ parameters:
       'type: DHCPScope
        reference: http://api.menandmice.com/8.1.0/#DHCPScope
        json_schema: {
-         "available": "unsignedInt", 
-         "superscope": "string", 
-         "name": "string", 
-         "dhcpServerRef": "string", 
-         "enabled": "boolean", 
-         "rangeRef": "string", 
-         "ref": "string", 
-         "description": "string"
+         "available": "unsignedInt",
+         "description": "string",
+         "dhcpServerRef": "string",
+         "enabled": "boolean",
+         "name": "string",
+         "rangeRef": "string",
+         "ref": "string",
+         "superscope": "string"
        }'
   save_comment:
     type: string

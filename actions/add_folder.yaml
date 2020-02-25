@@ -45,10 +45,10 @@ parameters:
       'type: Folder
        reference: http://api.menandmice.com/8.1.0/#Folder
        json_schema: {
-         "contentType": "string", 
-         "ref": "string", 
-         "name": "string", 
-         "parentRef": "string"
+         "contentType": "string",
+         "name": "string",
+         "parentRef": "string",
+         "ref": "string"
        }'
   save_comment:
     type: string

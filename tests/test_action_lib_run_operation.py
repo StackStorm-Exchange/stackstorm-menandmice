@@ -1,7 +1,7 @@
 from men_and_mice_base_action_test_case import MenAndMiceBaseActionTestCase
 
-from lib.run_operation import RunOperation
-from lib.run_operation import CONFIG_CONNECTION_KEYS
+from run_operation import RunOperation
+from run_operation import CONFIG_CONNECTION_KEYS
 from st2common.runners.base_action import Action
 
 import copy
@@ -10,7 +10,7 @@ import zeep
 import logging
 
 
-class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
+class TestActionRunOperation(MenAndMiceBaseActionTestCase):
     __test__ = True
     action_cls = RunOperation
 
@@ -32,28 +32,6 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         camel = "excludeDHCP"
         result = action.snake_to_camel(snake)
         self.assertEqual(result, camel)
-
-    def test_get_del_arg_present(self):
-        action = self.get_action_instance({})
-        test_dict = {"key1": "value1",
-                     "key2": "value2"}
-        test_key = "key1"
-        expected_dict = {"key2": "value2"}
-        expected_value = test_dict["key1"]
-        result_value = action.get_del_arg(test_key, test_dict)
-        self.assertEqual(result_value, expected_value)
-        self.assertEqual(test_dict, expected_dict)
-
-    def test_get_del_arg_missing(self):
-        action = self.get_action_instance({})
-        test_dict = {"key1": "value1",
-                     "key2": "value2"}
-        test_key = "key3"
-        expected_dict = test_dict
-        expected_value = None
-        result_value = action.get_del_arg(test_key, test_dict)
-        self.assertEqual(result_value, expected_value)
-        self.assertEqual(test_dict, expected_dict)
 
     def test_resolve_connection_from_config(self):
         action = self.get_action_instance(self.config_good)
@@ -210,7 +188,7 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
                                                      password=connection['password'])
         self.assertEquals(result, expected_session)
 
-    @mock.patch('lib.run_operation.zeep.Client')
+    @mock.patch('run_operation.zeep.Client')
     def test__pre_exec_kwargs(self, mock_client):
         action = self.get_action_instance(self.config_blank)
         kwargs_dict = {'operation': 'GetDNSViews',
@@ -242,8 +220,8 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         self.assertEquals(result_client, mock_client.return_value)
         self.assertEquals(result_context, expected_context)
 
-    @mock.patch('lib.run_operation.zeep.Client')
-    @mock.patch('lib.run_operation.zeep.transports.Transport')
+    @mock.patch('run_operation.zeep.Client')
+    @mock.patch('run_operation.zeep.transports.Transport')
     def test__pre_exec_config(self, mock_transport, mock_client):
         action = self.get_action_instance(self.config_good)
         connection_name = 'full'
@@ -355,9 +333,9 @@ class TestActionLibRunOperation(MenAndMiceBaseActionTestCase):
         result = action._post_exec(obj)
         self.assertEquals(result, expected)
 
-    @mock.patch("lib.run_operation.RunOperation._post_exec")
-    @mock.patch("lib.run_operation.RunOperation._exec")
-    @mock.patch("lib.run_operation.RunOperation._pre_exec")
+    @mock.patch("run_operation.RunOperation._post_exec")
+    @mock.patch("run_operation.RunOperation._exec")
+    @mock.patch("run_operation.RunOperation._pre_exec")
     def test_run(self, mock__pre_exec, mock__exec, mock__post_exec):
         action = self.get_action_instance(self.config_blank)
         kwargs_dict = {'username': 'user',

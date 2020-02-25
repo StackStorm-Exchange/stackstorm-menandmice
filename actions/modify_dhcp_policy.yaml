@@ -54,45 +54,45 @@ parameters:
       'type: DHCPPolicy
        reference: http://api.menandmice.com/8.1.0/#DHCPPolicy
        json_schema: {
-         "name": "string", 
-         "logicalOperator": "string", 
-         "leaseDuration": {
-           "leaseSetting": "string", 
-           "leaseDuration": "unsignedInt"
-         }, 
-         "enabled": "boolean", 
-         "ranges": {
-           "dhcpPolicyRange": [
-             {
-               "to": "string", 
-               "from": "string"
-             }
-           ]
-         }, 
-         "ddnsSettings": {
-           "enabled": "boolean", 
-           "forceForNoneRequestingClients": "boolean", 
-           "disablePTRUpdates": "boolean", 
-           "discardRecords": "boolean", 
-           "dnsSuffix": "string", 
-           "alwaysUpdate": "boolean", 
-           "useDNSSuffix": "boolean"
-         }, 
          "conditions": {
            "dhcpPolicyCondition": [
              {
-               "conditionType": "string", 
+               "comparisonType": "string",
+               "conditionType": "string",
                "values": {
                  "string": [
                    "string"
                  ]
-               }, 
-               "comparisonType": "string"
+               }
              }
            ]
-         }, 
-         "order": "unsignedInt", 
-         "description": "string"
+         },
+         "ddnsSettings": {
+           "alwaysUpdate": "boolean",
+           "disablePTRUpdates": "boolean",
+           "discardRecords": "boolean",
+           "dnsSuffix": "string",
+           "enabled": "boolean",
+           "forceForNoneRequestingClients": "boolean",
+           "useDNSSuffix": "boolean"
+         },
+         "description": "string",
+         "enabled": "boolean",
+         "leaseDuration": {
+           "leaseDuration": "unsignedInt",
+           "leaseSetting": "string"
+         },
+         "logicalOperator": "string",
+         "name": "string",
+         "order": "unsignedInt",
+         "ranges": {
+           "dhcpPolicyRange": [
+             {
+               "from": "string",
+               "to": "string"
+             }
+           ]
+         }
        }'
   save_comment:
     type: string

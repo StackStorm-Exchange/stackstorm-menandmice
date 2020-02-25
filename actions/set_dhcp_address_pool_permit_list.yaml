@@ -50,8 +50,8 @@ parameters:
        json_schema: {
          "dhcpAddressPoolPermit": [
            {
-             "access": "string", 
-             "className": "string", 
+             "access": "string",
+             "className": "string",
              "permit": "string"
            }
          ]

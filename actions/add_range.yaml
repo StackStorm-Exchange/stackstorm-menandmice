@@ -45,70 +45,70 @@ parameters:
       'type: Range
        reference: http://api.menandmice.com/8.1.0/#Range
        json_schema: {
-         "parentRef": "string", 
-         "dhcpScopes": {
-           "object": [
-             {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
-             }
-           ]
-         }, 
-         "customProperties": {
-           "property": [
-             {
-               "name": "string", 
-               "value": "string"
-             }
-           ]
-         }, 
-         "cloudNetworkRef": "string", 
-         "subnet": "boolean", 
-         "from": "string", 
-         "inheritAccess": "boolean", 
-         "hasRogueAddresses": "boolean", 
-         "hasSchedule": "boolean", 
-         "to": "string", 
-         "ref": "string", 
-         "autoAssign": "boolean", 
+         "adSiteRef": "string",
+         "autoAssign": "boolean",
          "childRanges": {
            "object": [
              {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
              }
            ]
-         }, 
-         "adSiteRef": "string", 
-         "hasMonitor": "boolean", 
+         },
          "cloudAllocationPools": {
            "addressBlock": [
              {
-               "to": "string", 
-               "from": "string"
+               "from": "string",
+               "to": "string"
              }
            ]
-         }, 
+         },
+         "cloudNetworkRef": "string",
+         "creationTime": "string",
+         "customProperties": {
+           "property": [
+             {
+               "name": "string",
+               "value": "string"
+             }
+           ]
+         },
+         "dhcpScopes": {
+           "object": [
+             {
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
+             }
+           ]
+         },
          "discoveredProperties": {
            "networkDiscoveryInfo": [
              {
-               "routerName": "string", 
-               "interfaceID": "unsignedInt", 
-               "VRFName": "string", 
-               "interfaceName": "string", 
-               "interfaceDescription": "string", 
-               "VLANID": "unsignedInt", 
-               "gateway": "string"
+               "VLANID": "unsignedInt",
+               "VRFName": "string",
+               "gateway": "string",
+               "interfaceDescription": "string",
+               "interfaceID": "unsignedInt",
+               "interfaceName": "string",
+               "routerName": "string"
              }
            ]
-         }, 
-         "locked": "boolean", 
-         "name": "string", 
-         "utilizationPercentage": "unsignedInt", 
-         "creationTime": "string", 
-         "isContainer": "boolean"
+         },
+         "from": "string",
+         "hasMonitor": "boolean",
+         "hasRogueAddresses": "boolean",
+         "hasSchedule": "boolean",
+         "inheritAccess": "boolean",
+         "isContainer": "boolean",
+         "locked": "boolean",
+         "name": "string",
+         "parentRef": "string",
+         "ref": "string",
+         "subnet": "boolean",
+         "to": "string",
+         "utilizationPercentage": "unsignedInt"
        }'
   discovery:
     type: object
@@ -117,9 +117,9 @@ parameters:
       'type: Discovery
        reference: http://api.menandmice.com/8.1.0/#Discovery
        json_schema: {
-         "interval": "unsignedInt", 
-         "enabled": "boolean", 
-         "startTime": "string", 
+         "enabled": "boolean",
+         "interval": "unsignedInt",
+         "startTime": "string",
          "unit": "string"
        }'
   save_comment:
