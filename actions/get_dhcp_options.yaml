@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command GetDHCPOptions (http://api.menandmice.com/8.1.0/#GetDHCPOptions)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: get_dhcp_options
 parameters:
   operation:

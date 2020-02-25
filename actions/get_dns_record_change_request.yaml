@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command GetDNSRecordChangeRequest (http://api.menandmice.com/8.1.0/#GetDNSRecordChangeRequest)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: get_dns_record_change_request
 parameters:
   operation:

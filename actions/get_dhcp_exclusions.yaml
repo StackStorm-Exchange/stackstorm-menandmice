@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command GetDHCPExclusions (http://api.menandmice.com/8.1.0/#GetDHCPExclusions)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: get_dhcp_exclusions
 parameters:
   operation:

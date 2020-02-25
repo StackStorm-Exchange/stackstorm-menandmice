@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddRoleToUser (http://api.menandmice.com/8.1.0/#AddRoleToUser)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: add_role_to_user
 parameters:
   operation:

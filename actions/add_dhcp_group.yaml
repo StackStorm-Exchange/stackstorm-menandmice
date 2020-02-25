@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command AddDHCPGroup (http://api.menandmice.com/8.1.0/#AddDHCPGroup)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: add_dhcp_group
 parameters:
   operation:

@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command SetDHCPAddressPoolPermitList (http://api.menandmice.com/8.1.0/#SetDHCPAddressPoolPermitList)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: set_dhcp_address_pool_permit_list
 parameters:
   operation:

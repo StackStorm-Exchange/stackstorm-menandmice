@@ -161,14 +161,14 @@ class ActionGenerator(object):
     def generate_operation(self, operation):
         op_name = operation.name
         op_inputs = []
-        op_entry_point = "run_operation.py"
+        op_entry_point = "lib/run_operation.py"
 
         if op_name == "Login":
-            op_entry_point = "run_login.py"
+            op_entry_point = "lib/run_login.py"
         elif op_name == "Logout":
-            op_entry_point = "run_logout.py"
+            op_entry_point = "lib/run_logout.py"
         elif op_name == "GetHistory":
-            op_entry_point = "run_get_history.py"
+            op_entry_point = "lib/run_get_history.py"
 
         # Translate operation "inputs" in the SOAP WSDL into StackStorm action
         # parameters

@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command ReportMergeAddressSpaces (http://api.menandmice.com/8.1.0/#ReportMergeAddressSpaces)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: report_merge_address_spaces
 parameters:
   operation:

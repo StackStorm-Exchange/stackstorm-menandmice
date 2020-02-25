@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command RemoveFromADSite (http://api.menandmice.com/8.1.0/#RemoveFromADSite)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: remove_from_ad_site
 parameters:
   operation:

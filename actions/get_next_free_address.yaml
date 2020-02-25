@@ -2,7 +2,7 @@
 description: "Invokes the Men&Mice SOAP command GetNextFreeAddress (http://api.menandmice.com/8.1.0/#GetNextFreeAddress)"
 enabled: true
 runner_type: "python-script"
-entry_point: run_operation.py
+entry_point: lib/run_operation.py
 name: get_next_free_address
 parameters:
   operation:
