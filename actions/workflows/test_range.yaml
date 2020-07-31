@@ -1,7 +1,7 @@
 ---
 version: 1.0
 
-description: Test hostname to see if it is already in use in Men&Mice
+description: Test range to verify free addresses to use in Men&Mice
 
 input:
   - connection
@@ -11,8 +11,7 @@ input:
   - port
   - transport
   - session
-  - dns_domain
-  - hostname
+  - range_name
 
 tasks:
   main:
@@ -23,7 +22,7 @@ tasks:
           - login
       - when: "{{ succeeded() and (ctx().session != '') }}"
         do:
-          - get_dns_zone
+          - get_range
 
   login:
     action: menandmice.login
@@ -39,34 +38,19 @@ tasks:
         publish:
           - session: "{{ result().result.session }}"
         do:
-          - get_dns_zone
+          - get_range
 
-  get_dns_zone:
-    action: menandmice.get_dns_zones
+  get_range:
+    action: menandmice.get_ranges
     input:
-      session: "{{ ctx().session }}"
       server: "{{ ctx().server }}"
-      transport: "{{ ctx().transport }}"
-      filter: type:master name:^{{ ctx().dns_domain }}.$
-    next:
-      - when: "{{ succeeded() }}"
-        publish:
-          - dns_zone_ref: "{{ result().result.dnsZones.dnsZone[0].ref }}"
-        do:
-          - check_dns_name
-
-  check_dns_name:
-    action: menandmice.get_dns_records
-    input:
       session: "{{ ctx().session }}"
-      server: "{{ ctx().server }}"
       transport: "{{ ctx().transport }}"
-      dns_zone_ref: "{{ ctx().dns_zone_ref }}"
-      filter: name={{ ctx().hostname }}
+      filter: "^{{ ctx().range_name }}$"
     next:
-      - when: "{{ result().result.totalResults > 0 }}"
+      - when: "{{ succeeded() and (result().result.ranges.range[0].utilizationPercentage == 100) }}"
         do:
           - fail
-      - when: "{{ result().result.totalResults == 0 }}"
+      - when: "{{ succeeded() and (result().result.ranges.range[0].utilizationPercentage < 100) }}"
         do:
           - noop
