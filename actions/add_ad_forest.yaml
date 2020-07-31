@@ -45,12 +45,12 @@ parameters:
       'type: ADForest
        reference: http://api.menandmice.com/8.1.0/#ADForest
        json_schema: {
-         "userName": "string", 
-         "catalogServer": "string", 
-         "name": "string", 
-         "readOnly": "boolean", 
-         "password": "string", 
-         "ref": "string"
+         "catalogServer": "string",
+         "name": "string",
+         "password": "string",
+         "readOnly": "boolean",
+         "ref": "string",
+         "userName": "string"
        }'
   save_comment:
     type: string

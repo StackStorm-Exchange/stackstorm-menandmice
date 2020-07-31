@@ -45,17 +45,17 @@ parameters:
       'type: CloudNetwork
        reference: http://api.menandmice.com/8.1.0/#CloudNetwork
        json_schema: {
-         "cloudRef": "string", 
-         "ref": "string", 
-         "name": "string", 
+         "cloudRef": "string",
          "customProperties": {
            "property": [
              {
-               "name": "string", 
+               "name": "string",
                "value": "string"
              }
            ]
-         }
+         },
+         "name": "string",
+         "ref": "string"
        }'
   save_comment:
     type: string

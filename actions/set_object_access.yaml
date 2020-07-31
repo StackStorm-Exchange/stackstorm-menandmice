@@ -47,16 +47,16 @@ parameters:
        json_schema: {
          "identityAccess": [
            {
-             "identityRef": "string", 
              "accessEntries": {
                "accessEntry": [
                  {
-                   "access": "string", 
+                   "access": "string",
                    "name": "string"
                  }
                ]
-             }, 
-             "identityName": "string"
+             },
+             "identityName": "string",
+             "identityRef": "string"
            }
          ]
        }'

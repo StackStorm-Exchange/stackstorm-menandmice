@@ -50,31 +50,31 @@ parameters:
        json_schema: {
          "dnsRecordChange": [
            {
-             "hasAccess": "boolean", 
+             "changeIndex": "unsignedInt",
              "dnsRecordAfter": {
-               "comment": "string", 
-               "aging": "unsignedInt", 
-               "dnsZoneRef": "string", 
-               "name": "string", 
-               "ref": "string", 
-               "enabled": "boolean", 
-               "data": "string", 
-               "ttl": "string", 
+               "aging": "unsignedInt",
+               "comment": "string",
+               "data": "string",
+               "dnsZoneRef": "string",
+               "enabled": "boolean",
+               "name": "string",
+               "ref": "string",
+               "ttl": "string",
                "type": "string"
-             }, 
-             "state": "string", 
+             },
              "dnsRecordBefore": {
-               "comment": "string", 
-               "aging": "unsignedInt", 
-               "dnsZoneRef": "string", 
-               "name": "string", 
-               "ref": "string", 
-               "enabled": "boolean", 
-               "data": "string", 
-               "ttl": "string", 
+               "aging": "unsignedInt",
+               "comment": "string",
+               "data": "string",
+               "dnsZoneRef": "string",
+               "enabled": "boolean",
+               "name": "string",
+               "ref": "string",
+               "ttl": "string",
                "type": "string"
-             }, 
-             "changeIndex": "unsignedInt", 
+             },
+             "hasAccess": "boolean",
+             "state": "string",
              "type": "string"
            }
          ]

@@ -45,31 +45,31 @@ parameters:
       'type: User
        reference: http://api.menandmice.com/8.1.0/#User
        json_schema: {
-         "name": "string", 
-         "authenticationType": "string", 
-         "roles": {
-           "object": [
-             {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
-             }
-           ]
-         }, 
+         "authenticationType": "string",
+         "description": "string",
+         "email": "string",
+         "fullName": "string",
          "groups": {
            "object": [
              {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
              }
            ]
-         }, 
-         "fullName": "string", 
-         "password": "string", 
-         "ref": "string", 
-         "email": "string", 
-         "description": "string"
+         },
+         "name": "string",
+         "password": "string",
+         "ref": "string",
+         "roles": {
+           "object": [
+             {
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
+             }
+           ]
+         }
        }'
   save_comment:
     type: string

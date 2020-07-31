@@ -48,15 +48,15 @@ parameters:
       'type: DNSGenerateDirective
        reference: http://api.menandmice.com/8.1.0/#DNSGenerateDirective
        json_schema: {
-         "rangeEnd": "unsignedInt", 
-         "type": "string", 
-         "rhs": "string", 
-         "rangeStep": "unsignedInt", 
-         "rangeStart": "unsignedInt", 
-         "lhs": "string", 
-         "ttl": "string", 
-         "ref": "string", 
-         "class": "string"
+         "class": "string",
+         "lhs": "string",
+         "rangeEnd": "unsignedInt",
+         "rangeStart": "unsignedInt",
+         "rangeStep": "unsignedInt",
+         "ref": "string",
+         "rhs": "string",
+         "ttl": "string",
+         "type": "string"
        }'
   save_comment:
     type: string

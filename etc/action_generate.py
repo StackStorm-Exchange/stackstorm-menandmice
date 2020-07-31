@@ -20,6 +20,7 @@ import requests
 from xml.dom import minidom
 import yaml
 import zeep
+from zeep.xsd.types import builtins
 
 
 ACTION_TEMPLATE_PATH = "./action_template.yaml.j2"
@@ -88,7 +89,7 @@ class ActionGenerator(object):
     def load_template_params(self):
         params_yaml_str = self.jinja_render_file(ACTION_TEMPLATE_PATH,
                                                  {'operation_camel_case': ''})
-        params_dict = yaml.load(params_yaml_str)
+        params_dict = yaml.load(params_yaml_str, Loader=yaml.FullLoader)
         params = params_dict['parameters'].keys()
         return params
 
@@ -130,7 +131,7 @@ class ActionGenerator(object):
         if not elem_type.name:
             return None
 
-        if isinstance(elem_type, zeep.xsd.types.builtins.BuiltinType):
+        if isinstance(elem_type, builtins.BuiltinType):  # pylint: disable=no-member
             if type_elem.accepts_multiple:
                 return [elem_type._default_qname.localname]
             else:
@@ -148,7 +149,7 @@ class ActionGenerator(object):
     def get_type_description(self, type_elem):
         type_dict = self.build_type_dict(type_elem)
         # type_desc = pprint.pformat(type_dict)
-        type_json = json.dumps(type_dict, indent=2)
+        type_json = json.dumps(type_dict, indent=2, sort_keys=True)
         type_json = type_json.replace('\n', '\n       ')
         return (">\n"
                 "      'type: {0}\n"
@@ -207,7 +208,7 @@ class ActionGenerator(object):
                 print("ERROR: Param conflicts with default: {}.{}"
                       .format(op_name, parameter_name))
 
-            if isinstance(input_type_obj, zeep.xsd.types.builtins.BuiltinType):
+            if isinstance(input_type_obj, builtins.BuiltinType):  # pylint: disable=no-member
                 parameter_type = input_type_obj._default_qname.localname
                 if parameter_type == "unsignedInt":
                     parameter_type = "integer"

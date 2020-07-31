@@ -48,10 +48,10 @@ parameters:
       'type: DHCPOptionDefinition
        reference: http://api.menandmice.com/8.1.0/#DHCPOptionDefinition
        json_schema: {
-         "array": "boolean", 
-         "type": "string", 
-         "option": "string", 
-         "name": "string"
+         "array": "boolean",
+         "name": "string",
+         "option": "string",
+         "type": "string"
        }'
   save_comment:
     type: string

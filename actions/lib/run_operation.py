@@ -59,19 +59,6 @@ class RunOperation(Action):
             camel_cased_str = components[0]
         return preffix + camel_cased_str + suffix
 
-    def get_del_arg(self, key, kwargs_dict):
-        """Attempts to retrieve an argument from kwargs with key.
-        If the key is found, then delete it from the dict.
-        :param key: the key of the argument to retrieve from kwargs
-        :returns: The value of key in kwargs, if it exists, otherwise None
-        """
-        if key in kwargs_dict:
-            value = kwargs_dict[key]
-            del kwargs_dict[key]
-            return value
-        else:
-            return None
-
     def resolve_connection(self, kwargs_dict):
         """Attempts to resolve the connection information by looking up information
         from action input parameters (highest priority) or from the config (fallback).
@@ -80,7 +67,7 @@ class RunOperation(Action):
         :returns: a dictionary with the connection parameters (see: CONFIG_CONNECTION_KEYS)
         resolved.
         """
-        connection_name = self.get_del_arg('connection', kwargs_dict)
+        connection_name = kwargs_dict.pop('connection', None)
         config_connection = None
         if connection_name:
             config_connection = self.config['menandmice'].get(connection_name)
@@ -99,7 +86,7 @@ class RunOperation(Action):
         for key, required, default in CONFIG_CONNECTION_KEYS:
             if key in kwargs_dict and kwargs_dict[key]:
                 # use params from cmdline first (override)
-                action_connection[key] = self.get_del_arg(key, kwargs_dict)
+                action_connection[key] = kwargs_dict.pop(key, None)
             elif config_connection and key in config_connection and config_connection[key]:
                 # fallback to creds in config
                 action_connection[key] = config_connection[key]
@@ -196,8 +183,8 @@ class RunOperation(Action):
         :returns: a tuple containing a context object
         """
         kwargs_dict = dict(kwargs)
-        operation = self.get_del_arg('operation', kwargs_dict)
-        session = self.get_del_arg('session', kwargs_dict)
+        operation = kwargs_dict.pop('operation', None)
+        session = kwargs_dict.pop('session', None)
         connection = self.resolve_connection(kwargs_dict)
         wsdl_url = self.build_wsdl_url(connection)
 

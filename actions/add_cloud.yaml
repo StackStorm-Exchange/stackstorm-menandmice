@@ -45,21 +45,21 @@ parameters:
       'type: Cloud
        reference: http://api.menandmice.com/8.1.0/#Cloud
        json_schema: {
-         "username": "string", 
-         "httpsRequired": "boolean", 
-         "name": "string", 
-         "ref": "string", 
-         "serverNode": "string", 
          "customProperties": {
            "property": [
              {
-               "name": "string", 
+               "name": "string",
                "value": "string"
              }
            ]
-         }, 
-         "password": "string", 
-         "type": "string"
+         },
+         "httpsRequired": "boolean",
+         "name": "string",
+         "password": "string",
+         "ref": "string",
+         "serverNode": "string",
+         "type": "string",
+         "username": "string"
        }'
   save_comment:
     type: string

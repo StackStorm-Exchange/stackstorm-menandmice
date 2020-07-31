@@ -53,11 +53,11 @@ parameters:
              "allocationPools": {
                "addressBlock": [
                  {
-                   "to": "string", 
-                   "from": "string"
+                   "from": "string",
+                   "to": "string"
                  }
                ]
-             }, 
+             },
              "rangeRef": "string"
            }
          ]
