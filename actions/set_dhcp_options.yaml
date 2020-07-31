@@ -56,7 +56,7 @@ parameters:
        json_schema: {
          "dhcpOption": [
            {
-             "option": "string", 
+             "option": "string",
              "value": "string"
            }
          ]

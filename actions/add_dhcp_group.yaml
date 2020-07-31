@@ -45,10 +45,10 @@ parameters:
       'type: DHCPGroup
        reference: http://api.menandmice.com/8.1.0/#DHCPGroup
        json_schema: {
-         "ownerRef": "string", 
-         "ref": "string", 
-         "name": "string", 
-         "parentRef": "string"
+         "name": "string",
+         "ownerRef": "string",
+         "parentRef": "string",
+         "ref": "string"
        }'
   save_comment:
     type: string

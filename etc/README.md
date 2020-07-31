@@ -7,6 +7,11 @@ SOAP WSDL file and generate StackStorm actions from it.
 # Typical Workflow
 
 ``` shell
+# setup virtualenv (inside this etc/ directory)
+virtualenv venv
+source ./venv/bin/activate
+pip install -r requirements.txt
+
 # fetch the latest WSDL from the Men&Mice server
 ./action_generate.py fetch-wsdl -H menandmice.domain.tld
 

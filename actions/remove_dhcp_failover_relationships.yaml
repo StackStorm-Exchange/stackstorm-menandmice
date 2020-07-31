@@ -47,7 +47,7 @@ parameters:
        json_schema: {
          "dhcpRefAndFailoverRelationshipName": [
            {
-             "dhcpFailoverRelationshipName": "string", 
+             "dhcpFailoverRelationshipName": "string",
              "dhcpServerRef": "string"
            }
          ]

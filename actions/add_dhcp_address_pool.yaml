@@ -45,13 +45,13 @@ parameters:
       'type: DHCPAddressPool
        reference: http://api.menandmice.com/8.1.0/#DHCPAddressPool
        json_schema: {
-         "from": "string", 
-         "name": "string", 
-         "failoverPeer": "string", 
-         "to": "string", 
-         "failoverRelationship": "string", 
-         "dhcpScopeRef": "string", 
-         "ref": "string"
+         "dhcpScopeRef": "string",
+         "failoverPeer": "string",
+         "failoverRelationship": "string",
+         "from": "string",
+         "name": "string",
+         "ref": "string",
+         "to": "string"
        }'
   save_comment:
     type: string

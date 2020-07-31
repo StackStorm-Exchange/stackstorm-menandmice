@@ -45,27 +45,27 @@ parameters:
       'type: Role
        reference: http://api.menandmice.com/8.1.0/#Role
        json_schema: {
-         "users": {
-           "object": [
-             {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
-             }
-           ]
-         }, 
-         "ref": "string", 
-         "name": "string", 
+         "description": "string",
          "groups": {
            "object": [
              {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
              }
            ]
-         }, 
-         "description": "string"
+         },
+         "name": "string",
+         "ref": "string",
+         "users": {
+           "object": [
+             {
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
+             }
+           ]
+         }
        }'
   save_comment:
     type: string

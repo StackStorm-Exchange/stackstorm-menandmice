@@ -45,28 +45,28 @@ parameters:
       'type: Group
        reference: http://api.menandmice.com/8.1.0/#Group
        json_schema: {
-         "name": "string", 
-         "roles": {
-           "object": [
-             {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
-             }
-           ]
-         }, 
-         "adIntegrated": "boolean", 
+         "adIntegrated": "boolean",
+         "description": "string",
          "groupMembers": {
            "object": [
              {
-               "objType": "string", 
-               "ref": "string", 
-               "name": "string"
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
              }
            ]
-         }, 
-         "ref": "string", 
-         "description": "string"
+         },
+         "name": "string",
+         "ref": "string",
+         "roles": {
+           "object": [
+             {
+               "name": "string",
+               "objType": "string",
+               "ref": "string"
+             }
+           ]
+         }
        }'
   save_comment:
     type: string

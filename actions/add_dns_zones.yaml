@@ -73,7 +73,7 @@ parameters:
        json_schema: {
          "property": [
            {
-             "name": "string", 
+             "name": "string",
              "value": "string"
            }
          ]

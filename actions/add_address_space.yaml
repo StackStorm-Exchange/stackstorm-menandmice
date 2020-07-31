@@ -45,9 +45,9 @@ parameters:
       'type: AddressSpace
        reference: http://api.menandmice.com/8.1.0/#AddressSpace
        json_schema: {
-         "ref": "string", 
-         "name": "string", 
-         "description": "string"
+         "description": "string",
+         "name": "string",
+         "ref": "string"
        }'
   save_comment:
     type: string

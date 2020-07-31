@@ -45,10 +45,10 @@ parameters:
       'type: DHCPExclusion
        reference: http://api.menandmice.com/8.1.0/#DHCPExclusion
        json_schema: {
-         "from": "string", 
-         "dhcpScopeRef": "string", 
-         "ref": "string", 
-         "name": "string", 
+         "dhcpScopeRef": "string",
+         "from": "string",
+         "name": "string",
+         "ref": "string",
          "to": "string"
        }'
   save_comment:
