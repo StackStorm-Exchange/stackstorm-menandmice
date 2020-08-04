@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.1.2
+
+* Fixed entry point in login action.
+  Contributed by Bradley Bishop (Encore Technologies)
+
 ## v1.1.1
 
 * Added test_range action and workflow to test if range has available addresses
