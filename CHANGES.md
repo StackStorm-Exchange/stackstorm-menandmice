@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.1.3
+
+* Test_range workflow updated utilization logic and added address reservation checking
+  Contributed by Alex Chrystal (Encore Technologies)
+
 ## v1.1.2
 
 * Fixed entry point in login action.
