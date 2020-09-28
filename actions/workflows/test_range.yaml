@@ -12,6 +12,18 @@ input:
   - transport
   - session
   - range_name
+  - num_reserved_addresses
+  - excluded_ranges
+
+vars:
+  - err_message: ""
+  - starting_address: null
+  - reserved_address_max_value: 0
+  - next_free_octet: 0
+  - claim_time: 0
+
+output:
+  - error: "{{ ctx().err_message }}"
 
 tasks:
   main:
@@ -48,9 +60,62 @@ tasks:
       transport: "{{ ctx().transport }}"
       filter: "^{{ ctx().range_name }}$"
     next:
-      - when: "{{ succeeded() and (result().result.ranges.range[0].utilizationPercentage == 100) }}"
+      - when: "{{ succeeded() and (result().result.totalResults != 1) }}"
+        publish:
+          - err_message: "Range does not exist"
         do:
           - fail
-      - when: "{{ succeeded() and (result().result.ranges.range[0].utilizationPercentage < 100) }}"
+      - when: "{{ succeeded() and (result().result.totalResults == 1) and (result().result.ranges.range[0].utilizationPercentage == 100) }}"
+        publish:
+          - err_message: "Range is full"
+        do:
+          - fail
+      - when: "{{ succeeded() and (result().result.totalResults == 1) and (result().result.ranges.range[0].utilizationPercentage < 100) }}"
+        publish:
+          - starting_address: "{{ result().result.ranges.range[0].from }}"
+        do:
+          - reservation_dispatch
+
+  reservation_dispatch:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and not ctx().num_reserved_addresses }}"
         do:
           - noop
+      - when: "{{ succeeded() and ctx().range_name in ctx().excluded_ranges }}"
+        do:  
+          - noop
+      - when: "{{ succeeded() and (ctx().range_name not in ctx().excluded_ranges) and ctx().num_reserved_addresses }}"
+        publish:
+          - reserved_address_max_value: "{{ ctx().starting_address.split('.', 3)[3] | int + ctx().num_reserved_addresses }}"
+        do:  
+          - get_next_free_address
+  
+  get_next_free_address:
+    action: menandmice.get_next_free_address
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      range_ref: "{{ ctx().range_name }}"
+      start_address: "{{ ctx().starting_address }}"
+      temporary_claim_time: "{{ ctx().claim_time }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - next_free_octet: "{{ result().result.split('.', 3)[3] | int }}"
+        do:
+          - check_addresses
+
+  check_addresses:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and ctx().next_free_octet <= ctx().reserved_address_max_value }}"
+        publish:
+          - err_message: "addresses are not claimed"
+        do:
+          - fail
+      - when: "{{ succeeded() and ctx().next_free_octet > ctx().reserved_address_max_value }}"
+        do:
+          - noop
+
