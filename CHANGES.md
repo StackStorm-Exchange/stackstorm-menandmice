@@ -1,6 +1,6 @@
 # Change Log
 
-## v1.1.3
+## v1.2.0
 
 * Test_range workflow updated utilization logic and added address reservation checking
   Contributed by Alex Chrystal (Encore Technologies)
