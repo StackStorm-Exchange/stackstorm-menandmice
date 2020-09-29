@@ -40,3 +40,11 @@ parameters:
     type: string
     description: "Name of the range to get the next available ip address from."
     required: true
+  num_reserved_addresses:
+    type: integer
+    description: "Number of addresses to test for within specified range"
+    required: false
+  excluded_ranges:
+    type: array
+    description: "Optional list of ranges to be excluded from test"
+    default: []
