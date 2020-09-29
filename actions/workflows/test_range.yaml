@@ -116,12 +116,13 @@ tasks:
     next:
       - when: "{{ succeeded() and ctx().next_free_octet <= ctx().reserved_address_max_value }}"
         publish:
-          - err_message: "Error claiming an IP address in Men&Mice within the range {{ ctx().range_name }}. When trying to claim 
-          a new IP address in this range, we received an address of {{ ctx().next_free_address}}. This is an error. It is expected
-          that the first {{ ctx().num_reserved_addresses }} addresses [{{ ctx().starting_address[:-1] }}1 - {{ ctx().starting_address[:-1] }}{{ctx().num_reserved_addresses }}]
-          are either marked as claimed or assigned a DNS record so that new systems do not step on existing network equipment,
-          such as the default gateway. To fix this error, please go into Men&Mice and claim the first {{ctx().num_reserved_addresses}}
-          addresses within the range {{ ctx().range_name }}"
+          - err_message: |
+              "Error claiming an IP address in Men&Mice within the range {{ ctx().range_name }}. When trying to claim
+              a new IP address in this range, we received an address of {{ ctx().next_free_address}}. This is an error. It is expected
+              that the first {{ ctx().num_reserved_addresses }} addresses [{{ ctx().starting_address[:-1] }}1 - {{ ctx().starting_address[:-1] }}{{ctx().num_reserved_addresses }}]
+              are either marked as claimed or assigned a DNS record so that new systems do not step on existing network equipment,
+              such as the default gateway. To fix this error, please go into Men&Mice and claim the first {{ctx().num_reserved_addresses}}
+              addresses within the range {{ ctx().range_name }}"
         do:
           - fail
       - when: "{{ succeeded() and ctx().next_free_octet > ctx().reserved_address_max_value }}"
