@@ -12,6 +12,19 @@ input:
   - transport
   - session
   - range_name
+  - num_reserved_addresses
+  - excluded_ranges
+
+vars:
+  - err_message: ""
+  - starting_address: null
+  - next_free_address: null
+  - reserved_address_max_value: 0
+  - next_free_octet: 0
+  - claim_time: 0
+
+output:
+  - error: "{{ ctx().err_message }}"
 
 tasks:
   main:
@@ -48,9 +61,71 @@ tasks:
       transport: "{{ ctx().transport }}"
       filter: "^{{ ctx().range_name }}$"
     next:
-      - when: "{{ succeeded() and (result().result.ranges.range[0].utilizationPercentage == 100) }}"
+      - when: "{{ succeeded() and (result().result.totalResults != 1) }}"
+        publish:
+          - err_message: "Range does not exist"
         do:
           - fail
-      - when: "{{ succeeded() and (result().result.ranges.range[0].utilizationPercentage < 100) }}"
+      - when: "{{ succeeded() and (result().result.totalResults == 1) and (result().result.ranges.range[0].utilizationPercentage == 100) }}"
+        publish:
+          - err_message: "Range is full"
+        do:
+          - fail
+      - when: "{{ succeeded() and (result().result.totalResults == 1) and (result().result.ranges.range[0].utilizationPercentage < 100) }}"
+        publish:
+          - starting_address: "{{ result().result.ranges.range[0].from }}"
+        do:
+          - reservation_dispatch
+
+  reservation_dispatch:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and not ctx().num_reserved_addresses }}"
         do:
           - noop
+      - when: "{{ succeeded() and ctx().range_name in ctx().excluded_ranges }}"
+        do:  
+          - noop
+      - when: "{{ succeeded() and (ctx().range_name not in ctx().excluded_ranges) and ctx().num_reserved_addresses }}"
+        publish:
+          # reserved_address_max_value is the last octet of the last ip address in the range to be tested
+          - reserved_address_max_value: "{{ ctx().starting_address.split('.', 3)[3] | int + ctx().num_reserved_addresses }}"
+        do:  
+          - get_next_free_address
+  
+  get_next_free_address:
+    action: menandmice.get_next_free_address
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      range_ref: "{{ ctx().range_name }}"
+      start_address: "{{ ctx().starting_address }}"
+      temporary_claim_time: "{{ ctx().claim_time }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          # next_free_octet is the last octet of the first available ip address in the specified range
+          - next_free_octet: "{{ result().result.split('.', 3)[3] | int }}"
+          - next_free_address: "{{ result().result }}"
+        do:
+          - check_addresses
+
+  check_addresses:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and ctx().next_free_octet <= ctx().reserved_address_max_value }}"
+        publish:
+          - err_message: |
+              "Error claiming an IP address in Men&Mice within the range {{ ctx().range_name }}. When trying to claim
+              a new IP address in this range, we received an address of {{ ctx().next_free_address}}. This is an error. It is expected
+              that the first {{ ctx().num_reserved_addresses }} addresses [{{ ctx().starting_address[:-1] }}1 - {{ ctx().starting_address[:-1] }}{{ctx().num_reserved_addresses }}]
+              are either marked as claimed or assigned a DNS record so that new systems do not step on existing network equipment,
+              such as the default gateway. To fix this error, please go into Men&Mice and claim the first {{ctx().num_reserved_addresses}}
+              addresses within the range {{ ctx().range_name }}"
+        do:
+          - fail
+      - when: "{{ succeeded() and ctx().next_free_octet > ctx().reserved_address_max_value }}"
+        do:
+          - noop
+
