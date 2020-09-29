@@ -18,6 +18,7 @@ input:
 vars:
   - err_message: ""
   - starting_address: null
+  - next_free_address: null
   - reserved_address_max_value: 0
   - next_free_octet: 0
   - claim_time: 0
@@ -87,6 +88,7 @@ tasks:
           - noop
       - when: "{{ succeeded() and (ctx().range_name not in ctx().excluded_ranges) and ctx().num_reserved_addresses }}"
         publish:
+          # reserved_address_max_value is the last octet of the last ip address in the range to be tested
           - reserved_address_max_value: "{{ ctx().starting_address.split('.', 3)[3] | int + ctx().num_reserved_addresses }}"
         do:  
           - get_next_free_address
@@ -103,7 +105,9 @@ tasks:
     next:
       - when: "{{ succeeded() }}"
         publish:
+          # next_free_octet is the last octet of the first available ip address in the specified range
           - next_free_octet: "{{ result().result.split('.', 3)[3] | int }}"
+          - next_free_address: "{{ result().result }}"
         do:
           - check_addresses
 
@@ -112,7 +116,12 @@ tasks:
     next:
       - when: "{{ succeeded() and ctx().next_free_octet <= ctx().reserved_address_max_value }}"
         publish:
-          - err_message: "addresses are not claimed"
+          - err_message: "Error claiming an IP address in Men&Mice within the range {{ ctx().range_name }}. When trying to claim 
+          a new IP address in this range, we received an address of {{ ctx().next_free_address}}. This is an error. It is expected
+          that the first {{ ctx().num_reserved_addresses }} addresses [{{ ctx().starting_address[:-1] }}1 - {{ ctx().starting_address[:-1] }}{{ctx().num_reserved_addresses }}]
+          are either marked as claimed or assigned a DNS record so that new systems do not step on existing network equipment,
+          such as the default gateway. To fix this error, please go into Men&Mice and claim the first {{ctx().num_reserved_addresses}}
+          addresses within the range {{ ctx().range_name }}"
         do:
           - fail
       - when: "{{ succeeded() and ctx().next_free_octet > ctx().reserved_address_max_value }}"
