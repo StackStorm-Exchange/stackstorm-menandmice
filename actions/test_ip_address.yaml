@@ -23,6 +23,10 @@ parameters:
     description: "Optional override of the Men&Mice password in <connection>. (required if <connection> is not specified)"
     required: false
     secret: true
+  ping_address:
+    type: boolean
+    description: "Should the address be pingged to make sure its not in use."
+    default: false
   port:
     type: integer
     description: "Optional override of the Men&Mice port in <connection>."

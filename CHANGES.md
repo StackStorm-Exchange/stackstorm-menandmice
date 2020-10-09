@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.3.0
+
+* test_ip_address - ping_address input added to decide if the address should be pinged before claiming the address.
+* dns_record_claim - ping_address input added to decide if the address should be pinged before claiming the address.
+  Contributed by Bradley Bishop (Encore Technologies)
+
 ## v1.2.0
 
 * Test_range workflow updated utilization logic and added address reservation checking
