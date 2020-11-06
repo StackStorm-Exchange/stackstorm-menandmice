@@ -15,10 +15,10 @@ input:
   - hostname
 
 vars:
-  - err_message: ""
+  - error: ""
 
 output:
-  - error: "{{ ctx().err_message }}"
+  - error: "{{ ctx().error }}"
 
 tasks:
   main:
@@ -48,7 +48,7 @@ tasks:
           - get_dns_zone
       - when: "{{ failed() }}"
         publish:
-          - err_message: "Could not login to menandmice"
+          - error: "Could not login to menandmice with username={{ ctx().username }}"
 
   get_dns_zone:
     action: menandmice.get_dns_zones
@@ -65,7 +65,7 @@ tasks:
           - check_dns_name
       - when: "{{ failed() }}"
         publish:
-          - err_message: "Could not get dns zone"
+          - error: "Could not find DNS zone with name={{ ctx().dns_domain }}"
 
   check_dns_name:
     action: menandmice.get_dns_records
@@ -78,7 +78,7 @@ tasks:
     next:
       - when: "{{ result().result.totalResults > 0 }}"
         publish:
-          - err_message: "Hostname is already in use"
+          - error: "Hostname={{ ctx().hostname}} is already in use"
         do:
           - fail
       - when: "{{ result().result.totalResults == 0 }}"

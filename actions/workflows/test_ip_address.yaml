@@ -15,10 +15,10 @@ input:
   - range_name
 
 vars:
-  - err_message: ""
+  - error: ""
 
 output:
-  - error: "{{ ctx().err_message }}"
+  - error: "{{ ctx().error }}"
 
 tasks:
   main:
@@ -48,7 +48,7 @@ tasks:
           - get_range
       - when: "{{ failed() }}"
         publish:
-          - err_message: "Could not login to menandmice"
+          - error: "Could not login to menandmice with username={{ ctx().username }}"
 
   get_range:
     action: menandmice.get_ranges
@@ -65,7 +65,7 @@ tasks:
           - get_ip_address
       - when: "{{ succeeded() and (result().result.totalResults != 1) }}"
         publish:
-          - err_message: "Range does not exist"
+          - error: "Could not find range with name={{ ctx().range_name }}"
         do:
           - fail
 
@@ -85,9 +85,9 @@ tasks:
           - record_claimed: "{{ result().result.ipamRecords.ipamRecord[0].claimed }}"
         do:
           - test_address
-      - when: "{{ failed() }}" # TODO: REMOVE?
+      - when: "{{ failed() }}"
         publish:
-          - err_message: "Could not retrieve ipam records"
+          - error: "Could not retrieve ipam records"
 
   test_address:
     action: core.noop
@@ -97,6 +97,12 @@ tasks:
           - noop
       - when: "{{ succeeded() and (ctx().num_results != 1 or ctx().record_state == 'assigned' or ctx().record_claimed == true) }}"
         publish:
-          - err_message: "IP address is either assigned or claimed already"
+          - error: |
+              {% if ctx().record_state == 'assigned' %}
+              IP is already assigned with address={{ ctx().ip_address }}
+              {% endif %}
+              {% if ctx().record_claimed == true %}
+              IP address={{ ctx().ip_address}} is assigned but there is no DNS associated with it
+              {% endif %}
         do:
           - fail
