@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.3.0
+
+* Test_ip_address and test_hostname workflow updated to have more meaningful error messages
+  Contributed by Alex Chrystal (Encore Technologies)
+
 ## v1.2.0
 
 * Test_range workflow updated utilization logic and added address reservation checking
