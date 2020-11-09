@@ -8,6 +8,7 @@ input:
   - server
   - username
   - password
+  - ping_address
   - port
   - transport
   - session
@@ -94,7 +95,7 @@ tasks:
     next:
       - when: "{{ succeeded() and (ctx().num_results == 1 and ctx().record_state == 'free' and ctx().record_claimed == false) }}"
         do:
-          - noop
+          - ping_dispatch
       - when: "{{ succeeded() and (ctx().num_results != 1 or ctx().record_state == 'assigned' or ctx().record_claimed == true) }}"
         publish:
           - error: |
@@ -106,3 +107,28 @@ tasks:
               {% endif %}
         do:
           - fail
+
+  ping_dispatch:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and (ctx().ping_address) }}"
+        do:
+          - ping_address
+      - when: "{{ succeeded() and (not ctx().ping_address) }}"
+        do:
+          - noop
+
+  ping_address:
+    action: menandmice.ping
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      addr_ref: "{{ ctx().ip_address }}"
+    next:
+      - when: "{{ succeeded() and result().result.alive }}"
+        do:
+          - fail
+      - when: "{{ succeeded() and not result().result.alive }}"
+        do:
+          - noop
