@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.4.1
+
+* Fixing deploy tag to include the latest code
+  Contributed by Bradley Bishop (Encore Technologies)
+
 ## v1.4.0
 
 * Test_ip_address and test_hostname workflow updated to have more meaningful error messages
