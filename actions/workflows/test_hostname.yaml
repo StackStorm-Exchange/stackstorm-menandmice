@@ -14,6 +14,12 @@ input:
   - dns_domain
   - hostname
 
+vars:
+  - error: ""
+
+output:
+  - error: "{{ ctx().error }}"
+
 tasks:
   main:
     action: core.noop
@@ -40,6 +46,9 @@ tasks:
           - session: "{{ result().result.session }}"
         do:
           - get_dns_zone
+      - when: "{{ failed() }}"
+        publish:
+          - error: "Could not login to menandmice with username={{ ctx().username }}"
 
   get_dns_zone:
     action: menandmice.get_dns_zones
@@ -54,6 +63,9 @@ tasks:
           - dns_zone_ref: "{{ result().result.dnsZones.dnsZone[0].ref }}"
         do:
           - check_dns_name
+      - when: "{{ failed() }}"
+        publish:
+          - error: "Could not find DNS zone with name={{ ctx().dns_domain }}"
 
   check_dns_name:
     action: menandmice.get_dns_records
@@ -65,6 +77,8 @@ tasks:
       filter: name={{ ctx().hostname }}
     next:
       - when: "{{ result().result.totalResults > 0 }}"
+        publish:
+          - error: "Hostname={{ ctx().hostname}} is already in use"
         do:
           - fail
       - when: "{{ result().result.totalResults == 0 }}"

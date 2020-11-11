@@ -8,11 +8,18 @@ input:
   - server
   - username
   - password
+  - ping_address
   - port
   - transport
   - session
   - ip_address
   - range_name
+
+vars:
+  - error: ""
+
+output:
+  - error: "{{ ctx().error }}"
 
 tasks:
   main:
@@ -40,6 +47,9 @@ tasks:
           - session: "{{ result().result.session }}"
         do:
           - get_range
+      - when: "{{ failed() }}"
+        publish:
+          - error: "Could not login to menandmice with username={{ ctx().username }}"
 
   get_range:
     action: menandmice.get_ranges
@@ -55,6 +65,8 @@ tasks:
         do:
           - get_ip_address
       - when: "{{ succeeded() and (result().result.totalResults != 1) }}"
+        publish:
+          - error: "Could not find range with name={{ ctx().range_name }}"
         do:
           - fail
 
@@ -74,13 +86,49 @@ tasks:
           - record_claimed: "{{ result().result.ipamRecords.ipamRecord[0].claimed }}"
         do:
           - test_address
+      - when: "{{ failed() }}"
+        publish:
+          - error: "Could not retrieve ipam records"
 
   test_address:
     action: core.noop
     next:
       - when: "{{ succeeded() and (ctx().num_results == 1 and ctx().record_state == 'free' and ctx().record_claimed == false) }}"
         do:
-          - noop
+          - ping_dispatch
       - when: "{{ succeeded() and (ctx().num_results != 1 or ctx().record_state == 'assigned' or ctx().record_claimed == true) }}"
+        publish:
+          - error: |
+              {% if ctx().record_state == 'assigned' %}
+              IP is already assigned with address={{ ctx().ip_address }}
+              {% endif %}
+              {% if ctx().record_claimed == true %}
+              IP address={{ ctx().ip_address}} is assigned but there is no DNS associated with it
+              {% endif %}
         do:
           - fail
+
+  ping_dispatch:
+    action: core.noop
+    next:
+      - when: "{{ succeeded() and (ctx().ping_address) }}"
+        do:
+          - ping_address
+      - when: "{{ succeeded() and (not ctx().ping_address) }}"
+        do:
+          - noop
+
+  ping_address:
+    action: menandmice.ping
+    input:
+      server: "{{ ctx().server }}"
+      session: "{{ ctx().session }}"
+      transport: "{{ ctx().transport }}"
+      addr_ref: "{{ ctx().ip_address }}"
+    next:
+      - when: "{{ succeeded() and result().result.alive }}"
+        do:
+          - fail
+      - when: "{{ succeeded() and not result().result.alive }}"
+        do:
+          - noop

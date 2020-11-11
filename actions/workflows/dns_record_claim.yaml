@@ -8,6 +8,7 @@ input:
   - server
   - username
   - password
+  - ping_address
   - port
   - transport
   - session
@@ -102,6 +103,7 @@ tasks:
       transport: "{{ ctx().transport }}"
       range_ref: "{{ ctx().range_ref }}"
       temporary_claim_time: 1
+      ping: "{{ ctx().ping_address }}"
     next:
       - when: "{{ succeeded() }}"
         publish:
@@ -118,6 +120,7 @@ tasks:
       transport: "{{ ctx().transport }}"
       range_name: "{{ ctx().range_name }}"
       ip_address: "{{ ctx().ip_address }}"
+      ping_address: "{{ ctx().ping_address }}"
     next:
       - when: "{{ succeeded() }}"
         do:
